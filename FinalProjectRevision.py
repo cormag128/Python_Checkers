@@ -117,13 +117,13 @@ class Board():
 		i = 0
 		while i < self.height:
 			j = 0
-			print "---------------------------------------"
+			print "---------------------------------"
 			while j < self.width:
-				print "|%s|" % (self.board[i][j]),
+				print "|%s" % (self.board[i][j]),
 				j += 1
-			print ""
+			print "|"
 			i += 1
-		print "---------------------------------------"
+		print "---------------------------------"
 
 	
 	#Driver function for white moves.
