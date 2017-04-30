@@ -427,7 +427,7 @@ class Board():
 
 		
 	def determinePieceToMoveEasy(self):
-		#Looks through board state to find first piece with viable movement
+		#Looks through board state to find first piece with viable movement 
 		i = 7
 		j = 0
 		wval = 0
@@ -436,12 +436,61 @@ class Board():
 			j = 0;
 			while j < self.width:
 				if self.board[i][j].startswith("B"):
-					if ((self.board[i + 1][i - 1] == " ")):
+					#Boundary checking for left side.					
+					if((j - 1) < 0):
+						if((self.board[i + 1][j + 1] == "  ")):
+							hval = i
+							wval = j
+							self.board[i + 1][j + 1] = self.board[hval][wval]
+							self.board[hval][wval] = "  "
+							self.printboard()
+							board.turn = "W"
+							return
+					#Boundary checking for right side.					
+					if((j + 1) >= self.width):
+						if((self.board[i + 1][j - 1] == "  ")):
+							hval = i
+							wval = j
+							self.board[i + 1][j - 1] = self.board[hval][wval]
+							self.board[hval][wval] = "  "
+							self.printboard()
+							board.turn = "W"
+							return
+					#Move left if a left move is available.
+					elif((self.board[i + 1][j - 1] == "  ")):
 						hval = i
 						wval = j
-						self.board[i + 1][i - 1] = self.board[hval][wval]
+						self.board[i + 1][j - 1] = self.board[hval][wval]
 						self.board[hval][wval] = "  "
-						self.printBoard()
+						self.printboard()
+						board.turn = "W"
+						return
+					#If left space is occupied by white piece, and right move is available, move right.					
+					elif(self.board[i + 1][j - 1].startswith("W")):
+						if((self.board[i + 1][j + 1] == "  ")):
+							hval = i
+							wval = j
+							self.board[i + 1][j + 1] = self.board[hval][wval]
+							self.board[hval][wval] = "  "
+							self.printboard()
+							board.turn = "W"
+							return
+					#If right space is occupied, and left is available, move left.				
+					elif(self.board[i + 1][j + 1].startswith("W")):
+						if((self.board[i + 1][j - 1] == "  ")):
+							hval = i
+							wval = j
+							self.board[i + 1][j + 1] = self.board[hval][wval]
+							self.board[hval][wval] = "  "
+							self.printboard()
+							board.turn = "W"
+							return
+					#Create king piece for black.				
+					if hval == 7:
+						self.board[hval][wval] = self.kingme(str)
+						self.printboard()
+															
+					
 				j += 1
 			i -= 1
 
@@ -469,8 +518,9 @@ board.setup()
 board.printboard()
 iter1 = 0
 board.printboard()
-board.whiteDriver()
-board.determinePieceToMoveEasy()
-board.whiteDriver()
+while(iter1 <= 15):
+	board.whiteDriver()
+	board.determinePieceToMoveEasy()
+	iter1 += 1
 
 	
