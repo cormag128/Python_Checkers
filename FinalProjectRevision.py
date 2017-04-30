@@ -125,6 +125,19 @@ class Board():
 			i += 1
 		print "---------------------------------"
 
+	def kingme(self,stri):
+		if(stri.startswith("W")):
+			new = list(stri)
+			new[0] = "K"
+			stri = ''.join(new)
+			print (stri)
+		elif(stri.startswith("B")):
+			new = list(stri)
+			new[0] = "Q"
+			stri = ''.join(new)
+			print (stri)
+		else:
+			pass
 	
 	#Driver function for white moves.
 	def whiteDriver(self):		
