@@ -26,7 +26,7 @@ class Errors:
 
 # Class to populate and print board.
 class Board():
-	board = [" " * 8 for i in range(8)]
+	board = ["  " * 8 for i in range(8)]
 	error = Errors
 	turn = 'W'
 	winState = 'N'
@@ -115,13 +115,13 @@ class Board():
 		i = 0
 		while i < self.height:
 			j = 0
-			print "---------------------------------------"
+			print "---------------------------------"
 			while j < self.width:
-				print "|%s|" % (self.board[i][j]),
+				print "|%s" % (self.board[i][j]),
 				j += 1
-			print ""
+			print "|"
 			i += 1
-		print "---------------------------------------"
+		print "---------------------------------"
 
 	
 	#Driver function for white moves.
@@ -129,7 +129,10 @@ class Board():
 		coordinate = raw_input("Please enter piece to move: ")
 		direction = input("Which direction would you like to move? ")
 		self.moveWhite(coordinate, direction)	
-	
+
+	def kingme(self):
+		pass
+
 	#Function to move the white pieces, perform jumps and other input verification.
 	#No king rules written in yet.	
 	def moveWhite(self,str,move):
@@ -198,7 +201,7 @@ class Board():
 						print (self.error.MustJump)						
 						self.board[hval - 2][wval + 2] = self.board[hval][wval]
 						self.board[hval - 1][wval + 1] = "  "
-						self.board[hval][wval] = " "
+						self.board[hval][wval] = "  "
 						board.printboard()
 						board.turn = "B"
 
@@ -240,12 +243,12 @@ class Board():
 						direction = input("Which direction would you like to move? ")
 						self.moveWhite(coordinate, direction)	
 						turn = "B"				
-					elif(self.board[hval - 2][wval - 2] == "  "):		
+					elif(self.board[hval - 2][wval - 2] == "  "):
 						print (self.error.MustJump)
 						
 						self.board[hval - 2][wval - 2] = self.board[hval][wval]
 						self.board[hval - 1][wval - 1] = "  "
-						self.board[hval][wval] = " "
+						self.board[hval][wval] = "  "
 						board.printboard()
 						board.turn = "B"
 				
@@ -267,7 +270,7 @@ class Board():
 				self.moveWhite(coordinate, direction)
 
 		
-	def determinePieceToMove():
+	def determinePieceToMove(self):
 		#find the location of the checker we are looking for, could be a function
 		#that returns to a checkers class with wval, hval, and str for variables?
 		i = 0
@@ -292,6 +295,22 @@ class Board():
 		# to handle kings/queens, and no jump handling, jump function could
 		# be made and replace the occupied space errors where a jump is possible
 		if (str.startswith("B")):
+
+			# find the location of the checker we are looking for, could be a function
+			# that returns to a checkers class with wval, hval, and str for variables?
+			i = 0
+			j = 0
+			wval = 0
+			hval = 0
+			while i < self.height:
+				j = 0;
+				while j < self.width:
+					if self.board[i][j] == str:
+						hval = i
+						wval = j
+					j += 1
+				i += 1
+
 			# moving down and to the left
 			if move == 1:
 				if((wval - 1) < 0):
@@ -337,7 +356,7 @@ class Board():
 
 #Easy mode module; will just examine black pieces, choose one that can perform valid move, and move it. No jumping.
 def easyMode(Board):
-	 	
+	 	pass
 
 #Medium mode module: will move random black pieces, but can jump the player.
 #class mediumMode():
@@ -354,6 +373,8 @@ board = Board(8, 8)
 board.setup()
 board.printboard()
 iter1 = 0
+
+board.moveWhite()
 while(iter1 <= 5):
 	if(board.turn == "W"):	
 		board.whiteDriver()
