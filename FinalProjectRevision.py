@@ -26,10 +26,12 @@ class Errors:
 
 # Class to populate and print board.
 class Board():
-	board = ["  " * 8 for i in range(8)]
+	board = [" " * 8 for i in range(8)]
 	error = Errors
 	turn = 'W'
 	winState = 'N'
+	blackPieces = 12
+	whitePieces = 12
 
 	def __init__(self, width, height):
 		self.width = width
@@ -115,13 +117,13 @@ class Board():
 		i = 0
 		while i < self.height:
 			j = 0
-			print "---------------------------------"
+			print "---------------------------------------"
 			while j < self.width:
-				print "|%s" % (self.board[i][j]),
+				print "|%s|" % (self.board[i][j]),
 				j += 1
-			print "|"
+			print ""
 			i += 1
-		print "---------------------------------"
+		print "---------------------------------------"
 
 	
 	#Driver function for white moves.
@@ -129,10 +131,7 @@ class Board():
 		coordinate = raw_input("Please enter piece to move: ")
 		direction = input("Which direction would you like to move? ")
 		self.moveWhite(coordinate, direction)	
-
-	def kingme(self):
-		pass
-
+	
 	#Function to move the white pieces, perform jumps and other input verification.
 	#No king rules written in yet.	
 	def moveWhite(self,str,move):
@@ -201,8 +200,14 @@ class Board():
 						print (self.error.MustJump)						
 						self.board[hval - 2][wval + 2] = self.board[hval][wval]
 						self.board[hval - 1][wval + 1] = "  "
-						self.board[hval][wval] = "  "
+						self.board[hval][wval] = " "
 						board.printboard()
+						board.turn = "B"
+					elif((wval + 2) >= self.width):
+						print (self.error.OutofBounds)
+						coordinate = raw_input("Please enter piece to move: ")
+						direction = input("Which direction would you like to move? ")
+						self.moveWhite(coordinate, direction)
 						board.turn = "B"
 
 			# moving up and to the left
@@ -243,13 +248,19 @@ class Board():
 						direction = input("Which direction would you like to move? ")
 						self.moveWhite(coordinate, direction)	
 						turn = "B"				
-					elif(self.board[hval - 2][wval - 2] == "  "):
+					elif(self.board[hval - 2][wval - 2] == "  "):		
 						print (self.error.MustJump)
 						
 						self.board[hval - 2][wval - 2] = self.board[hval][wval]
 						self.board[hval - 1][wval - 1] = "  "
-						self.board[hval][wval] = "  "
+						self.board[hval][wval] = " "
 						board.printboard()
+						board.turn = "B"
+					elif((wval - 2) < 0):
+						print (self.error.OutofBounds)
+						coordinate = raw_input("Please enter piece to move: ")
+						direction = input("Which direction would you like to move? ")
+						self.moveWhite(coordinate, direction)
 						board.turn = "B"
 				
 			# error handling for other moves
@@ -270,93 +281,32 @@ class Board():
 				self.moveWhite(coordinate, direction)
 
 		
-	def determinePieceToMove(self):
-		#find the location of the checker we are looking for, could be a function
-		#that returns to a checkers class with wval, hval, and str for variables?
-		i = 0
+	def determinePieceToMoveEasy(self):
+		#Looks through board state to find first piece with viable movement 
+		i = 7
 		j = 0
 		wval = 0
 		hval = 0
-		while i < self.height:
+		while i >= 0:
 			j = 0;
 			while j < self.width:
-				if self.board[i][j] == str:
-					hval = i
-					wval = j
-				j += 1
-			i += 1
-
-				
-	
-	#Could have a general move function in the board class to move the black piece? And then a more robust move that will determine how a moved is performed.	
-	def easyModeBlack(self,str,move):		
-		
-		#black movement could be split into functions, still needs
-		# to handle kings/queens, and no jump handling, jump function could
-		# be made and replace the occupied space errors where a jump is possible
-		if (str.startswith("B")):
-
-			# find the location of the checker we are looking for, could be a function
-			# that returns to a checkers class with wval, hval, and str for variables?
-			i = 0
-			j = 0
-			wval = 0
-			hval = 0
-			while i < self.height:
-				j = 0;
-				while j < self.width:
-					if self.board[i][j] == str:
+				if self.board[i][j].startswith("B"):
+					if ((self.board[i + 1][i - 1] == " ")):		
 						hval = i
 						wval = j
-					j += 1
-				i += 1
+						self.board[i + 1][i - 1] = self.board[hval][wval]
+						self.board[hval][wval] = "  "
+						self.printBoard()
+				j += 1
+			i -= 1
 
-			# moving down and to the left
-			if move == 1:
-				if((wval - 1) < 0):
-					print (self.error.OutofBounds)
-					coordinate = raw_input("Please enter piece to move: ")
-					direction = input("Which direction would you like to move? ")
-					self.moveBlack(coordinate, direction)
-				elif self.board[hval + 1][wval - 1] == "  ":
-					self.board[hval + 1][wval - 1] = self.board[hval][wval]
-					self.board[hval][wval] = "  "
-					board.printboard()
-				#error handling
-				elif(self.board[hval + 1][wval - 1] == "W "):
-					raise Exception(("%s") % (self.error.OccupiedSpace))
-				elif(self.board[hval + 1][wval - 1] == "B "):
-					raise Exception(("%s") % (self.error.MustJump))
-			# moving down and to the right
-			elif move == 3:
-				if((wval + 1) >= self.width):
-					print (self.error.OutofBounds)
-					coordinate = raw_input("Please enter piece to move: ")
-					direction = input("Which direction would you like to move? ")
-					self.moveBlack(coordinate, direction)
-				elif self.board[hval + 1][wval + 1] == "  ":
-					self.board[hval + 1][wval + 1] = self.board[hval][wval]
-					self.board[hval][wval] = "  "
-					board.printboard()
-				# error handling
-				elif(self.board[hval + 1][wval + 1] == "W "):
-					raise Exception(("%s") % (self.error.MustJump))
-				elif(self.board[hval + 1][wval + 1] == "B "):
-					raise Exception(("%s") % (self.error.OccupiedSpace))
-			# error handling
-			elif move == 7:
-				print ("%s") % (self.error.BackwardMove)
-			elif move == 9:
-				print ("%s") % (self.error.BackwardMove)
-			else:
-				print ("%s") % (self.error.InvalidMove)
 
 
 
 
 #Easy mode module; will just examine black pieces, choose one that can perform valid move, and move it. No jumping.
-def easyMode(Board):
-	 	pass
+#def easyMode(Board):
+	 	
 
 #Medium mode module: will move random black pieces, but can jump the player.
 #class mediumMode():
@@ -373,11 +323,7 @@ board = Board(8, 8)
 board.setup()
 board.printboard()
 iter1 = 0
-
-board.moveWhite()
-while(iter1 <= 5):
-	if(board.turn == "W"):	
-		board.whiteDriver()
-	elif(board.turn == "B"):
-		board.turn = "W"
-	iter1 += 1
+board.whiteDriver()
+board.determinePieceToMoveEasy()
+board.whiteDriver()
+	
