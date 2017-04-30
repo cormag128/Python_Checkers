@@ -178,6 +178,14 @@ class Board():
 				self.moveWhite(coordinate, direction)
 				board.turn = "B"
 
+			# Wrong piece chosen; choose right piece.
+			elif (str.startswith("B") | str.startswith("Q")):
+				print(self.error.WrongPiece)
+				coordinate = raw_input("Please enter piece to move: ")
+				direction = input("Which direction would you like to move? ")
+				self.moveWhite(coordinate, direction)
+				board.turn = "B"
+
 			#Default movement
 			elif self.board[hval - 1][wval + 1] == "  ":
 				self.board[hval - 1][wval + 1] = self.board[hval][wval]
@@ -185,25 +193,17 @@ class Board():
 				board.printboard()
 				board.turn = "B"
 
-			#Wrong piece chosen; choose right piece.
-			elif(str.startswith("B")):
-				print(self.error.WrongPiece)
-				coordinate = raw_input("Please enter piece to move: ")
-				direction = input("Which direction would you like to move? ")
-				self.moveWhite(coordinate, direction)
-				board.turn = "B"
-
-
 			#If space is occupied by player piece
-			elif(self.board[hval - 1][wval + 1].startswith("W")):
+			elif(self.board[hval - 1][wval + 1].startswith("W") | self.board[hval - 1][wval + 1].startswith("K")):
 				print(self.error.OccupiedSpace)
 				coordinate = raw_input("Please enter piece to move: ")
 				direction = input("Which direction would you like to move? ")
 				self.moveWhite(coordinate, direction)
 				board.turn = "B"
+
 			#Instigate jump
-			elif(self.board[hval - 1][wval + 1].startswith("B")):
-				if(self.board[hval - 2][wval + 2].startswith("B")):
+			elif(self.board[hval - 1][wval + 1].startswith("B") | self.board[hval - 1][wval + 1].startswith("Q")):
+				if(self.board[hval - 2][wval + 2].startswith("B") | self.board[hval - 2][wval + 2].startswith("Q")):
 					print (self.error.OccupiedSpace)
 					coordinate = raw_input("Please enter piece to move: ")
 					direction = input("Which direction would you like to move? ")
@@ -232,30 +232,33 @@ class Board():
 				direction = input("Which direction would you like to move? ")
 				self.moveWhite(coordinate, direction)
 				board.turn = "B"
-			#Default movement
-			elif self.board[hval - 1][wval - 1] == "  ":
-				self.board[hval - 1][wval - 1] = self.board[hval][wval]
-				self.board[hval][wval] = "  "
-				board.printboard()
-				board.turn = "B"
-			#Wrong piece chosen; choose right piece.
-			elif(str.startswith("B")):
+
+			# Wrong piece chosen; choose right piece.
+			elif (str.startswith("B") | str.startswith("Q")):
 				print(self.error.WrongPiece)
 				coordinate = raw_input("Please enter piece to move: ")
 				direction = input("Which direction would you like to move? ")
 				self.moveWhite(coordinate, direction)
 				board.turn = "B"
 
+			#Default movement
+			elif self.board[hval - 1][wval - 1] == "  ":
+				self.board[hval - 1][wval - 1] = self.board[hval][wval]
+				self.board[hval][wval] = "  "
+				board.printboard()
+				board.turn = "B"
+
 			#If space is occupied by player piece
-			elif(self.board[hval - 1][wval - 1].startswith("W")):
+			elif(self.board[hval - 1][wval - 1].startswith("W") | self.board[hval - 1][wval - 1].startswith("K")):
 				print(self.error.OccupiedSpace)
 				coordinate = raw_input("Please enter piece to move: ")
 				direction = input("Which direction would you like to move? ")
 				self.moveWhite(coordinate, direction)
 				board.turn = "B"
+
 			#Instigate jump
-			elif(self.board[hval - 1][wval - 1].startswith("B")):
-				if(self.board[hval - 2][wval - 2].startswith("B")):
+			elif(self.board[hval - 1][wval - 1].startswith("B") | self.board[hval - 1][wval - 1].startswith("Q")):
+				if(self.board[hval - 2][wval - 2].startswith("B") | self.board[hval - 2][wval - 2].startswith("Q")):
 					print (self.error.OccupiedSpace)
 					coordinate = raw_input("Please enter piece to move: ")
 					direction = input("Which direction would you like to move? ")
@@ -263,7 +266,6 @@ class Board():
 					turn = "B"
 				elif(self.board[hval - 2][wval - 2] == "  "):
 					print (self.error.MustJump)
-
 					self.board[hval - 2][wval - 2] = self.board[hval][wval]
 					self.board[hval - 1][wval - 1] = "  "
 					self.board[hval][wval] = " "
@@ -276,6 +278,133 @@ class Board():
 					self.moveWhite(coordinate, direction)
 					board.turn = "B"
 
+		# kings moves and error handling for other moves
+		elif move == 1:
+			if str.startswith("W"):
+				print (self.error.BackwardMove)
+				coordinate = raw_input("Please enter piece to move: ")
+				direction = input("Which direction would you like to move? ")
+				self.moveWhite(coordinate, direction)
+
+			# Wrong piece chosen; choose right piece.
+			elif (str.startswith("B") | str.startswith("Q")):
+				print(self.error.WrongPiece)
+				coordinate = raw_input("Please enter piece to move: ")
+				direction = input("Which direction would you like to move? ")
+				self.moveWhite(coordinate, direction)
+				board.turn = "B"
+
+			#else it's a king
+			else:
+				if ((wval - 1) < 0) | (hval + 1 >= self.height):
+					print (self.error.OutofBounds)
+					coordinate = raw_input("Please enter piece to move: ")
+					direction = input("Which direction would you like to move? ")
+					self.moveWhite(coordinate, direction)
+					board.turn = "B"
+
+				# Default movement
+				elif self.board[hval + 1][wval - 1] == "  ":
+					self.board[hval + 1][wval - 1] = self.board[hval][wval]
+					self.board[hval][wval] = "  "
+					board.printboard()
+					board.turn = "B"
+
+				# If space is occupied by player piece
+				elif (self.board[hval + 1][wval - 1].startswith("W") | self.board[hval + 1][wval - 1].startswith("K")):
+					print(self.error.OccupiedSpace)
+					coordinate = raw_input("Please enter piece to move: ")
+					direction = input("Which direction would you like to move? ")
+					self.moveWhite(coordinate, direction)
+					board.turn = "B"
+
+				# Instigate jump
+				elif (self.board[hval + 1][wval - 1].startswith("B") | self.board[hval + 1][wval - 1].startswith("Q")):
+					if (self.board[hval + 2][wval - 2].startswith("B") | self.board[hval + 2][wval - 2].startswith("Q")):
+						print (self.error.OccupiedSpace)
+						coordinate = raw_input("Please enter piece to move: ")
+						direction = input("Which direction would you like to move? ")
+						self.moveWhite(coordinate, direction)
+						turn = "B"
+					elif (self.board[hval + 2][wval - 2] == "  "):
+						print (self.error.MustJump)
+						self.board[hval + 2][wval - 2] = self.board[hval][wval]
+						self.board[hval + 1][wval - 1] = "  "
+						self.board[hval][wval] = " "
+						board.printboard()
+						board.turn = "B"
+					elif ((wval - 2) < 0) | ((hval +2) >= self.height):
+						print (self.error.OutofBounds)
+						coordinate = raw_input("Please enter piece to move: ")
+						direction = input("Which direction would you like to move? ")
+						self.moveWhite(coordinate, direction)
+						board.turn = "B"
+
+		elif move == 3:
+			#if its a normal white piece move is illegal
+			if str.startswith("W"):
+				print (self.error.BackwardMove)
+				coordinate = raw_input("Please enter piece to move: ")
+				direction = input("Which direction would you like to move? ")
+				self.moveWhite(coordinate, direction)
+
+			# Wrong piece chosen; choose right piece.
+			elif (str.startswith("B") | str.startswith("Q")):
+				print(self.error.WrongPiece)
+				coordinate = raw_input("Please enter piece to move: ")
+				direction = input("Which direction would you like to move? ")
+				self.moveWhite(coordinate, direction)
+				board.turn = "B"
+
+			# else it's a king
+			else:
+				if ((wval + 1) < 0) | (hval + 1 >= self.height):
+					print (self.error.OutofBounds)
+					coordinate = raw_input("Please enter piece to move: ")
+					direction = input("Which direction would you like to move? ")
+					self.moveWhite(coordinate, direction)
+					board.turn = "B"
+
+				# Default movement
+				elif self.board[hval + 1][wval + 1] == "  ":
+					self.board[hval + 1][wval + 1] = self.board[hval][wval]
+					self.board[hval][wval] = "  "
+					board.printboard()
+					board.turn = "B"
+
+				# If space is occupied by player piece
+				elif (self.board[hval + 1][wval + 1].startswith("W") | self.board[hval + 1][wval + 1].startswith("K")):
+					print(self.error.OccupiedSpace)
+					coordinate = raw_input("Please enter piece to move: ")
+					direction = input("Which direction would you like to move? ")
+					self.moveWhite(coordinate, direction)
+					board.turn = "B"
+				# Instigate jump
+				elif (self.board[hval + 1][wval + 1].startswith("B") | self.board[hval + 1][wval + 1].startswith("Q")):
+					if (self.board[hval + 2][wval + 2].startswith("B") | self.board[hval + 2][wval + 2].startswith("Q")):
+						print (self.error.OccupiedSpace)
+						coordinate = raw_input("Please enter piece to move: ")
+						direction = input("Which direction would you like to move? ")
+						self.moveWhite(coordinate, direction)
+						turn = "B"
+					elif (self.board[hval + 2][wval + 2] == "  "):
+						print (self.error.MustJump)
+						self.board[hval + 2][wval + 2] = self.board[hval][wval]
+						self.board[hval + 1][wval + 1] = "  "
+						self.board[hval][wval] = " "
+						board.printboard()
+						board.turn = "B"
+					elif ((wval + 2) < 0) | ((hval + 2) >= self.height):
+						print (self.error.OutofBounds)
+						coordinate = raw_input("Please enter piece to move: ")
+						direction = input("Which direction would you like to move? ")
+						self.moveWhite(coordinate, direction)
+						board.turn = "B"
+		else:
+			print (self.error.InvalidMove)
+			coordinate = raw_input("Please enter piece to move: ")
+			direction = input("Which direction would you like to move? ")
+			self.moveWhite(coordinate, direction)
 
 		#get new location of the checker
 		i = 0
@@ -292,30 +421,13 @@ class Board():
 			i += 1
 
 		#make king if on top row
-		if hval == 0:
+		if (hval == 0) & (str.startswith("K") == "False"):
 			self.board[hval][wval] = self.kingme(str)
 			self.printboard()
 
-		# error handling for other moves
-		elif move == 1:
-			print (self.error.BackwardMove)
-			coordinate = raw_input("Please enter piece to move: ")
-			direction = input("Which direction would you like to move? ")
-			self.moveWhite(coordinate, direction)
-		elif move == 3:
-			print (self.error.BackwardMove)
-			coordinate = raw_input("Please enter piece to move: ")
-			direction = input("Which direction would you like to move? ")
-			self.moveWhite(coordinate, direction)
-		else:
-			print (self.error.InvalidMove)
-			coordinate = raw_input("Please enter piece to move: ")
-			direction = input("Which direction would you like to move? ")
-			self.moveWhite(coordinate, direction)
-
 		
 	def determinePieceToMoveEasy(self):
-		#Looks through board state to find first piece with viable movement 
+		#Looks through board state to find first piece with viable movement
 		i = 7
 		j = 0
 		wval = 0
@@ -324,7 +436,7 @@ class Board():
 			j = 0;
 			while j < self.width:
 				if self.board[i][j].startswith("B"):
-					if ((self.board[i + 1][i - 1] == " ")):		
+					if ((self.board[i + 1][i - 1] == " ")):
 						hval = i
 						wval = j
 						self.board[i + 1][i - 1] = self.board[hval][wval]
@@ -356,7 +468,6 @@ board = Board(8, 8)
 board.setup()
 board.printboard()
 iter1 = 0
-board.board[1][1] = "Wq"
 board.printboard()
 board.whiteDriver()
 board.determinePieceToMoveEasy()
