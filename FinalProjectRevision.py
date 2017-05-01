@@ -165,9 +165,7 @@ class Board():
 				j += 1
 			i += 1
 
-		#white movement could be split into functions still
-		# needs to handle kings/queens
-		#moving up and to the right
+		#If moving up and to right 
 		if move == 9:
 
 			#If moving out of right bound
@@ -214,6 +212,7 @@ class Board():
 					self.board[hval - 2][wval + 2] = self.board[hval][wval]
 					self.board[hval - 1][wval + 1] = "  "
 					self.board[hval][wval] = " "
+					board.blackPieces -= 1					
 					board.printboard()
 					board.turn = "B"
 				elif((wval + 2) >= self.width):
@@ -269,6 +268,7 @@ class Board():
 					self.board[hval - 2][wval - 2] = self.board[hval][wval]
 					self.board[hval - 1][wval - 1] = "  "
 					self.board[hval][wval] = " "
+					board.blackPieces -= 1					
 					board.printboard()
 					board.turn = "B"
 				elif((wval - 2) < 0):
@@ -331,6 +331,7 @@ class Board():
 						self.board[hval + 2][wval - 2] = self.board[hval][wval]
 						self.board[hval + 1][wval - 1] = "  "
 						self.board[hval][wval] = " "
+						board.blackPieces -= 1						
 						board.printboard()
 						board.turn = "B"
 					elif ((wval - 2) < 0) | ((hval +2) >= self.height):
@@ -392,6 +393,7 @@ class Board():
 						self.board[hval + 2][wval + 2] = self.board[hval][wval]
 						self.board[hval + 1][wval + 1] = "  "
 						self.board[hval][wval] = " "
+						board.blackPieces -= 1						
 						board.printboard()
 						board.turn = "B"
 					elif ((wval + 2) < 0) | ((hval + 2) >= self.height):
@@ -426,7 +428,7 @@ class Board():
 			self.printboard()
 
 		
-	def determinePieceToMoveEasy(self):
+	def easyMode(self):
 		#Looks through board state to find first piece with viable movement 
 		i = 7
 		j = 0
@@ -438,6 +440,7 @@ class Board():
 				if self.board[i][j].startswith("B"):
 					#Boundary checking for left side.					
 					if((j - 1) < 0):
+						#If right space is available to take, move  there.						
 						if((self.board[i + 1][j + 1] == "  ")):
 							hval = i
 							wval = j
@@ -446,6 +449,10 @@ class Board():
 							self.printboard()
 							board.turn = "W"
 							return
+						#Else, move onto next piece to be checked			
+						elif(self.board[i + 1][j + 1].startswith("W")):
+							j += 1
+							continue
 					#Boundary checking for right side.					
 					if((j + 1) >= self.width):
 						if((self.board[i + 1][j - 1] == "  ")):
@@ -456,6 +463,10 @@ class Board():
 							self.printboard()
 							board.turn = "W"
 							return
+						#Else, move onto next piece to be checked			
+						elif(self.board[i + 1][j - 1].startswith("W")):
+							j += 1
+							continue
 					#Move left if a left move is available.
 					elif((self.board[i + 1][j - 1] == "  ")):
 						hval = i
@@ -475,16 +486,17 @@ class Board():
 							self.printboard()
 							board.turn = "W"
 							return
-					#If right space is occupied, and left is available, move left.				
+					#If right space is occupied, and left is wall, move to next piece				
 					elif(self.board[i + 1][j + 1].startswith("W")):
-						if((self.board[i + 1][j - 1] == "  ")):
-							hval = i
-							wval = j
-							self.board[i + 1][j + 1] = self.board[hval][wval]
-							self.board[hval][wval] = "  "
-							self.printboard()
-							board.turn = "W"
-							return
+						if((j - 1) < 0):
+							if(self.board[i + 1][j - 1] == "  "):
+								hval = i
+								wval = j
+								self.board[i + 1][j + 1] = self.board[hval][wval]
+								self.board[hval][wval] = "  "
+								self.printboard()
+								board.turn = "W"
+								return
 					#Create king piece for black.				
 					if hval == 7:
 						self.board[hval][wval] = self.kingme(str)
@@ -498,12 +510,145 @@ class Board():
 
 
 
-#Easy mode module; will just examine black pieces, choose one that can perform valid move, and move it. No jumping.
-#def easyMode(Board):
+	def mediumMode(self):
+		#Looks through board state to find first piece with viable movement 
+		i = 7
+		j = 0
+		wval = 0
+		hval = 0
+		while i >= 0:
+			j = 0;
+			while j < self.width:
+				if self.board[i][j].startswith("B"):
+					#Boundary checking for left side.					
+					if((j - 1) < 0):
+						#If right move is available, take it.						
+						if((self.board[i + 1][j + 1] == "  ")):
+							hval = i
+							wval = j
+							self.board[i + 1][j + 1] = self.board[hval][wval]
+							self.board[hval][wval] = "  "
+							self.printboard()
+							board.turn = "W"
+							return
+						#Else, move onto next piece to be checked			
+						elif(self.board[i + 1][j +1].startswith("W")):
+							j += 1
+							continue
+					#Boundary checking for right side.					
+					if((j + 1) >= self.width):
+						#If Left space is open, move there.						
+						if((self.board[i + 1][j - 1] == "  ")):
+							hval = i
+							wval = j
+							self.board[i + 1][j - 1] = self.board[hval][wval]
+							self.board[hval][wval] = "  "
+							self.printboard()
+							board.turn = "W"
+							return
+						#Else, move onto next piece to be checked.
+						elif(self.board[i + 1][j - 1].startswith("W")):
+							j += 1
+							continue
+					#Move left if a left move is available.
+					if((self.board[i + 1][j - 1] == "  ")):
+						hval = i
+						wval = j
+						self.board[i + 1][j - 1] = self.board[hval][wval]
+						self.board[hval][wval] = "  "
+						self.printboard()
+						board.turn = "W"
+						return
+					#If left space is occupied, and a jump is available, take the jump.				
+					elif(self.board[i + 1][j - 1].startswith("W")):
+						#Boundary checking for left jump; if out of range, check right move.
+						if(j - 2 < 0):
+							if((self.board[i + 1][j + 1] == "  ")):
+								hval = i
+								wval = j
+								self.board[i + 1][j + 1] = self.board[hval][wval]
+								self.board[hval][wval] = "  "								
+								self.printboard()
+								board.turn = "W"
+								return	
+							
+							#Else if space is taken by black piece, move to next piece for analysis.
+							elif(self.board[i + 1][j + 1].startswith("B")):
+								j += 1
+								continue
+							#Else if a jump is available to the right, check for valid move.
+							elif(self.board[i + 1][j + 1].startswith("W")):
+								if((self.board[i + 2][j + 2] == "  ")):
+									hval = i
+									wval = j
+									self.board[i + 2][j + 2] = self.board[hval][wval]
+									self.board[hval][wval] = "  "
+									self.board[i + 1][j + 1] = "  "
+									board.whitePieces -= 1									
+									self.printboard()
+									board.turn = "W"
+									return
+						#Else if move is valid, make jump.						
+						elif((self.board[i + 2][j - 2] == "  ")):
+							hval = i
+							wval = j
+							self.board[i + 2][j - 2] = self.board[hval][wval]
+							self.board[hval][wval] = "  "
+							self.board[i + 1][j - 1] = "  "
+							board.whitePieces -= 1							
+							self.printboard()
+							board.turn = "W"
+							return			
+					#If right space is occupied, and a jump is available, take the jump.				
+					elif(self.board[i + 1][j + 1].startswith("W")):
+						#Boundary checking for right jump; if out of range, check left move.
+						if(j + 2 >= self.width):
+							if((self.board[i + 1][j - 1] == "  ")):
+								hval = i
+								wval = j
+								self.board[i + 1][j - 1] = self.board[hval][wval]
+								self.board[hval][wval] = "  "
+								self.printboard()
+								board.turn = "W"
+								return	
+							
+							#Else if space is taken by black piece, move to next piece for analysis.
+							elif(self.board[i + 1][j - 1].startswith("B")):
+								j += 1
+								continue
+							#Else if a jump is available to the left, check for valid move.
+							elif(self.board[i + 1][j - 1].startswith("W")):
+								if((self.board[i + 2][j - 2] == "  ")):
+									hval = i
+									wval = j
+									self.board[i + 2][j - 2] = self.board[hval][wval]
+									self.board[hval][wval] = "  "
+									self.board[i + 1][j - 1] = "  "
+									board.whitePieces -= 1									
+									self.printboard()
+									board.turn = "W"
+									return
+						#Else if move is valid, make jump.						
+						elif((self.board[i + 2][j + 2] == "  ")):
+							hval = i
+							wval = j
+							self.board[i + 2][j + 2] = self.board[hval][wval]
+							self.board[hval][wval] = "  "
+							self.board[i + 1][j + 1] = "  "
+							board.whitePieces -= 1							
+							self.printboard()
+							board.turn = "W"
+							return						
+					#Create king piece for black.				
+					if hval == 7:
+						self.board[hval][wval] = self.kingme(str)
+						self.printboard()
+															
+					
+				j += 1
+			i -= 1
+		
 	 	
-
-#Medium mode module: will move random black pieces, but can jump the player.
-#class mediumMode():
 
 #Hard mode class: use heuristic search to determine best move based on available user and computer moves; can and will jump.
 #class hardMode():
@@ -515,12 +660,41 @@ class Board():
 #build a board that is 8x8, place checkers and print it out
 board = Board(8, 8)
 board.setup()
-board.printboard()
-iter1 = 0
-board.printboard()
-while(iter1 <= 15):
-	board.whiteDriver()
-	board.determinePieceToMoveEasy()
-	iter1 += 1
 
+gameChoice = 'Y'
+
+while(gameChoice == 'Y'):
+
+	mode = raw_input("Which mode would you like to play? Easy(E), Medium(M), or Hard(H)? ")
+
+	while(mode != "Easy" and  mode != "E" and  mode != "e" and  mode != "Medium" and  mode != "M" and  mode != "m"):
+		mode = raw_input("Please type in a valid option: ")
+
+	if (mode == "Easy" or mode == 'E' or mode == 'e'):
+		board.printboard()	
+		while(board.blackPieces != 0):
+			if(board.turn == "W"):
+				board.whiteDriver()
+			elif(board.turn == "B"):
+				board.easyMode()
 	
+		if(board.blackPieces == 0):
+			print "White wins!"
+
+	elif(mode == "Medium" or mode == "M" or mode == "m"):
+		board.printboard()
+		while(board.blackPieces != 0 and board.whitePieces != 0):
+			if(board.turn == "W"):
+				board.whiteDriver()
+			elif(board.turn == "B"):
+				board.easyMode()
+
+		if(board.blackPieces == 0):	
+			print "White wins!"
+		elif(board.whitePieces == 0):
+			print "Black wins!"
+
+	gameChoice = raw_input("Would you like to play again? (Y/N)")
+	
+	while(gameChoice != 'Y' and gameChoice != 'y' and gameChoice != 'N' and gameChoice != 'n'):
+		gameChoice = raw_input("Please type in a valid option: ")  
