@@ -429,17 +429,17 @@ class Board():
 			self.printboard()
 
 		
-	def easyMode(self):
+	def beginnerMode(self):
 		#Looks through board state to find first piece with viable movement 
 		i = 7
 		j = 0
 		wval = 0
 		hval = 0
 		while i >= 0:
-			j = 0
+			j = 0;
 			while j < self.width:
 				if self.board[i][j].startswith("B"):
-					#Boundary checking for left side.
+					#Boundary checking for left side.					
 					if((j - 1) < 0):
 						#If right space is available to take, move  there.						
 						if((self.board[i + 1][j + 1] == "  ")):
@@ -477,8 +477,17 @@ class Board():
 						self.printboard()
 						board.turn = "W"
 						return
-					#If left space is occupied by white piece, and right move is available, move right.					
-					elif(self.board[i + 1][j - 1].startswith("W")):
+					#Else if right move is available.					
+					elif((self.board[i + 1][j + 1] == " ")):
+						hval = i
+						wval = j
+						self.board[i + 1][j + 1] = self.board[hval][wval]
+						self.board[hval][wval] = "  "
+						self.printboard()
+						board.turn = "W"
+						return
+					#If left space is occupied by white piece or black piece, and right move is available, move right.					
+					elif(self.board[i + 1][j - 1].startswith("W") or self.board[i + 1][j - 1].startswith("B")):
 						if((self.board[i + 1][j + 1] == "  ")):
 							hval = i
 							wval = j
@@ -487,8 +496,11 @@ class Board():
 							self.printboard()
 							board.turn = "W"
 							return
+						else:
+							break
+
 					#If right space is occupied, and left is wall, move to next piece				
-					elif(self.board[i + 1][j + 1].startswith("W")):
+					elif(self.board[i + 1][j + 1].startswith("W") or self.board[i + 1][j + 1].startswith("B")):
 						if((j - 1) < 0):
 							if(self.board[i + 1][j - 1] == "  "):
 								hval = i
@@ -498,10 +510,8 @@ class Board():
 								self.printboard()
 								board.turn = "W"
 								return
-					#Create king piece for black.				
-					if hval == 7:
-						self.board[hval][wval] = self.kingme(str)
-						self.printboard()
+					else:
+						return
 															
 					
 				j += 1
@@ -532,10 +542,18 @@ class Board():
 							self.printboard()
 							board.turn = "W"
 							return
-						#Else, move onto next piece to be checked			
-						elif(self.board[i + 1][j +1].startswith("W")):
-							j += 1
-							continue
+						#Else, if space occupied by player piece, check for available jump.			
+						elif(self.board[i + 1][j + 1].startswith("W")):
+							if((self.board[i + 2][j + 2] == "  ")):
+									hval = i
+									wval = j
+									self.board[i + 2][j + 2] = self.board[hval][wval]
+									self.board[hval][wval] = "  "
+									self.board[i + 1][j + 1] = "  "
+									board.whitePieces -= 1									
+									self.printboard()
+									board.turn = "W"
+									return
 					#Boundary checking for right side.					
 					if((j + 1) >= self.width):
 						#If Left space is open, move there.						
@@ -547,21 +565,21 @@ class Board():
 							self.printboard()
 							board.turn = "W"
 							return
-						#Else, move onto next piece to be checked.
+						#Else, if space occupied by player piece, check for available jump.
 						elif(self.board[i + 1][j - 1].startswith("W")):
-							j += 1
-							continue
-					#Move left if a left move is available.
-					if((self.board[i + 1][j - 1] == "  ")):
-						hval = i
-						wval = j
-						self.board[i + 1][j - 1] = self.board[hval][wval]
-						self.board[hval][wval] = "  "
-						self.printboard()
-						board.turn = "W"
-						return
+							if((self.board[i + 2][j - 2] == "  ")):
+									hval = i
+									wval = j
+									self.board[i + 2][j - 2] = self.board[hval][wval]
+									self.board[hval][wval] = "  "
+									self.board[i + 1][j - 1] = "  "
+									board.whitePieces -= 1									
+									self.printboard()
+									board.turn = "W"
+									return
+					
 					#If left space is occupied, and a jump is available, take the jump.				
-					elif(self.board[i + 1][j - 1].startswith("W")):
+					if(self.board[i + 1][j - 1].startswith("W")):
 						#Boundary checking for left jump; if out of range, check right move.
 						if(j - 2 < 0):
 							if((self.board[i + 1][j + 1] == "  ")):
@@ -639,7 +657,26 @@ class Board():
 							board.whitePieces -= 1							
 							self.printboard()
 							board.turn = "W"
-							return						
+							return	
+
+					#Else move left if a left move is available.
+					elif((self.board[i + 1][j - 1] == "  ")):
+						hval = i
+						wval = j
+						self.board[i + 1][j - 1] = self.board[hval][wval]
+						self.board[hval][wval] = "  "
+						self.printboard()
+						board.turn = "W"
+						return
+					#Else if move left if a right move is available.
+					elif((self.board[i + 1][j + 1] == "  ")):
+						hval = i
+						wval = j
+						self.board[i + 1][j + 1] = self.board[hval][wval]
+						self.board[hval][wval] = "  "
+						self.printboard()
+						board.turn = "W"
+						return					
 					#Create king piece for black.				
 					if hval == 7:
 						self.board[hval][wval] = self.kingme(str)
@@ -651,8 +688,8 @@ class Board():
 		
 	 	
 
-#Hard mode class: use heuristic search to determine best move based on available user and computer moves; can and will jump.
-#class hardMode():
+	#def hardMode(self):
+		
 	
 
 
@@ -662,27 +699,25 @@ class Board():
 board = Board(8, 8)
 board.setup()
 
-board.board[6][5] = "Kt"
-board.board[7][4] = "Bk"
-board.printboard()
-board.whiteDriver()
-
 gameChoice = 'Y'
 
 while(gameChoice == 'Y'):
 
-	mode = raw_input("Which mode would you like to play? Easy(E), Medium(M), or Hard(H)? ")
+	board.blackPieces = 12
+	board.whitePieces = 12	
 
-	while(mode != "Easy" and  mode != "E" and  mode != "e" and  mode != "Medium" and  mode != "M" and  mode != "m"):
+	mode = raw_input("Which mode would you like to play? Beginner(B), Medium(M), or Hard(H)? ")
+
+	while(mode != "Beginner" and  mode != "B" and  mode != "b" and  mode != "Medium" and  mode != "M" and  mode != "m"):
 		mode = raw_input("Please type in a valid option: ")
 
-	if (mode == "Easy" or mode == 'E' or mode == 'e'):
+	if (mode == "Beginner" or mode == 'B' or mode == 'b'):
 		board.printboard()	
 		while(board.blackPieces != 0):
 			if(board.turn == "W"):
 				board.whiteDriver()
 			elif(board.turn == "B"):
-				board.easyMode()
+				board.beginnerMode()
 	
 		if(board.blackPieces == 0):
 			print "White wins!"
@@ -693,15 +728,14 @@ while(gameChoice == 'Y'):
 			if(board.turn == "W"):
 				board.whiteDriver()
 			elif(board.turn == "B"):
-				board.easyMode()
+				board.mediumMode()
 
 		if(board.blackPieces == 0):	
 			print "White wins!"
 		elif(board.whitePieces == 0):
 			print "Black wins!"
 
-	gameChoice = raw_input("Would you like to play again? (Y/N)")
-
-
+	gameChoice = raw_input("Would you like to play again? (Y/N) ")
+	
 	while(gameChoice != 'Y' and gameChoice != 'y' and gameChoice != 'N' and gameChoice != 'n'):
-		gameChoice = raw_input("Please type in a valid option: ")  
+		gameChoice = raw_input("Please type in a valid option: ")   
