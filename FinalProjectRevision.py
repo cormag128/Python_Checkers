@@ -23,6 +23,7 @@ class Errors:
 	InvalidCapture = "Player can only capture opponent's pieces."
 	InvalidMove = "Please move to an adjacent empty space, or jump the opponent."
 	OutofBounds = "That move is out of bounds. Please choose another move."
+	InvalidInput = "You can move pieces with 7 and 9 (or 1 and 3 as well for kings). Please give valid input."
 
 
 # Class to populate and print board.
@@ -144,7 +145,7 @@ class Board():
 	#Driver function for white moves.
 	def whiteDriver(self):		
 		coordinate = raw_input("Please enter piece to move: ")
-		direction = input("Which direction would you like to move? ")
+		direction = raw_input("Which direction would you like to move? ")
 		self.moveWhite(coordinate, direction)	
 	
 	#Function to move the white pieces, perform jumps and other input verification.
@@ -170,19 +171,21 @@ class Board():
 		if found == 0:
 			print (self.error.InvalidPiece)
 			coordinate = raw_input("Please enter piece to move: ")
-			direction = input("Which direction would you like to move? ")
+			direction = raw_input("Which direction would you like to move? ")
 			self.moveWhite(coordinate, direction)
 			board.turn = "B"
+
+			
 		elif found == 1:
 
 			# If moving up and to right
-			if move == 9:
+			if move == '9':
 
 				# If moving out of right bound
 				if ((wval + 1) >= self.width) | ((hval - 1) < 0):
 					print (self.error.OutofBounds)
 					coordinate = raw_input("Please enter piece to move: ")
-					direction = input("Which direction would you like to move? ")
+					direction = raw_input("Which direction would you like to move? ")
 					self.moveWhite(coordinate, direction)
 					board.turn = "B"
 
@@ -190,7 +193,7 @@ class Board():
 				elif (str.startswith("B") | str.startswith("Q")):
 					print(self.error.WrongPiece)
 					coordinate = raw_input("Please enter piece to move: ")
-					direction = input("Which direction would you like to move? ")
+					direction = raw_input("Which direction would you like to move? ")
 					self.moveWhite(coordinate, direction)
 					board.turn = "B"
 
@@ -205,7 +208,7 @@ class Board():
 				elif(self.board[hval - 1][wval + 1].startswith("W") | self.board[hval - 1][wval + 1].startswith("K")):
 					print(self.error.OccupiedSpace)
 					coordinate = raw_input("Please enter piece to move: ")
-					direction = input("Which direction would you like to move? ")
+					direction = raw_input("Which direction would you like to move? ")
 					self.moveWhite(coordinate, direction)
 					board.turn = "B"
 
@@ -214,13 +217,13 @@ class Board():
 					if ((wval + 2) >= self.width) | ((hval - 2) < 0):
 						print (self.error.OutofBounds)
 						coordinate = raw_input("Please enter piece to move: ")
-						direction = input("Which direction would you like to move? ")
+						direction = raw_input("Which direction would you like to move? ")
 						self.moveWhite(coordinate, direction)
 						board.turn = "B"
 					elif(self.board[hval - 2][wval + 2].startswith("B") | self.board[hval - 2][wval + 2].startswith("Q")):
 						print (self.error.OccupiedSpace)
 						coordinate = raw_input("Please enter piece to move: ")
-						direction = input("Which direction would you like to move? ")
+						direction = raw_input("Which direction would you like to move? ")
 						self.moveWhite(coordinate, direction)
 						turn = "B"
 					elif(self.board[hval - 2][wval + 2] == "  "):
@@ -233,12 +236,12 @@ class Board():
 						board.turn = "B"
 
 			# moving up and to the left
-			elif move == 7:
+			elif move == '7':
 				#If moving out of left bound
 				if(wval - 1) < 0 | (hval - 1 < 0):
 					print (self.error.OutofBounds)
 					coordinate = raw_input("Please enter piece to move: ")
-					direction = input("Which direction would you like to move? ")
+					direction = raw_input("Which direction would you like to move? ")
 					self.moveWhite(coordinate, direction)
 					board.turn = "B"
 
@@ -246,7 +249,7 @@ class Board():
 				elif (str.startswith("B") | str.startswith("Q")):
 					print(self.error.WrongPiece)
 					coordinate = raw_input("Please enter piece to move: ")
-					direction = input("Which direction would you like to move? ")
+					direction = raw_input("Which direction would you like to move? ")
 					self.moveWhite(coordinate, direction)
 					board.turn = "B"
 
@@ -261,7 +264,7 @@ class Board():
 				elif(self.board[hval - 1][wval - 1].startswith("W") | self.board[hval - 1][wval - 1].startswith("K")):
 					print(self.error.OccupiedSpace)
 					coordinate = raw_input("Please enter piece to move: ")
-					direction = input("Which direction would you like to move? ")
+					direction = raw_input("Which direction would you like to move? ")
 					self.moveWhite(coordinate, direction)
 					board.turn = "B"
 
@@ -270,13 +273,13 @@ class Board():
 					if ((wval - 2) < 0) | ((hval - 2) < 0):
 						print (self.error.OutofBounds)
 						coordinate = raw_input("Please enter piece to move: ")
-						direction = input("Which direction would you like to move? ")
+						direction = raw_input("Which direction would you like to move? ")
 						self.moveWhite(coordinate, direction)
 						board.turn = "B"
 					elif(self.board[hval - 2][wval - 2].startswith("B") | self.board[hval - 2][wval - 2].startswith("Q")):
 						print (self.error.OccupiedSpace)
 						coordinate = raw_input("Please enter piece to move: ")
-						direction = input("Which direction would you like to move? ")
+						direction = raw_input("Which direction would you like to move? ")
 						self.moveWhite(coordinate, direction)
 						turn = "B"
 					elif(self.board[hval - 2][wval - 2] == "  "):
@@ -289,18 +292,18 @@ class Board():
 						board.turn = "B"
 
 			# kings moves and error handling for other moves
-			elif move == 1:
+			elif move == '1':
 				if str.startswith("W"):
 					print (self.error.BackwardMove)
 					coordinate = raw_input("Please enter piece to move: ")
-					direction = input("Which direction would you like to move? ")
+					direction = raw_input("Which direction would you like to move? ")
 					self.moveWhite(coordinate, direction)
 
 				# Wrong piece chosen; choose right piece.
 				elif (str.startswith("B") | str.startswith("Q")):
 					print(self.error.WrongPiece)
 					coordinate = raw_input("Please enter piece to move: ")
-					direction = input("Which direction would you like to move? ")
+					direction = raw_input("Which direction would you like to move? ")
 					self.moveWhite(coordinate, direction)
 					board.turn = "B"
 
@@ -309,7 +312,7 @@ class Board():
 					if ((wval - 1) < 0) | (hval + 1 >= self.height):
 						print (self.error.OutofBounds)
 						coordinate = raw_input("Please enter piece to move: ")
-						direction = input("Which direction would you like to move? ")
+						direction = raw_input("Which direction would you like to move? ")
 						self.moveWhite(coordinate, direction)
 						board.turn = "B"
 
@@ -324,7 +327,7 @@ class Board():
 					elif (self.board[hval + 1][wval - 1].startswith("W") | self.board[hval + 1][wval - 1].startswith("K")):
 						print(self.error.OccupiedSpace)
 						coordinate = raw_input("Please enter piece to move: ")
-						direction = input("Which direction would you like to move? ")
+						direction = raw_input("Which direction would you like to move? ")
 						self.moveWhite(coordinate, direction)
 						board.turn = "B"
 
@@ -333,13 +336,13 @@ class Board():
 						if ((wval - 2) < 0) | ((hval + 2) >= self.height):
 							print (self.error.OutofBounds)
 							coordinate = raw_input("Please enter piece to move: ")
-							direction = input("Which direction would you like to move? ")
+							direction = raw_input("Which direction would you like to move? ")
 							self.moveWhite(coordinate, direction)
 							board.turn = "B"
 						elif (self.board[hval + 2][wval - 2].startswith("B") | self.board[hval + 2][wval - 2].startswith("Q")):
 							print (self.error.OccupiedSpace)
 							coordinate = raw_input("Please enter piece to move: ")
-							direction = input("Which direction would you like to move? ")
+							direction = raw_input("Which direction would you like to move? ")
 							self.moveWhite(coordinate, direction)
 							turn = "B"
 						elif (self.board[hval + 2][wval - 2] == "  "):
@@ -352,19 +355,19 @@ class Board():
 							board.turn = "B"
 
 
-			elif move == 3:
+			elif move == '3':
 				#if its a normal white piece move is illegal
 				if str.startswith("W"):
 					print (self.error.BackwardMove)
 					coordinate = raw_input("Please enter piece to move: ")
-					direction = input("Which direction would you like to move? ")
+					direction = raw_input("Which direction would you like to move? ")
 					self.moveWhite(coordinate, direction)
 
 				# Wrong piece chosen; choose right piece.
 				elif (str.startswith("B") | str.startswith("Q")):
 					print(self.error.WrongPiece)
 					coordinate = raw_input("Please enter piece to move: ")
-					direction = input("Which direction would you like to move? ")
+					direction = raw_input("Which direction would you like to move? ")
 					self.moveWhite(coordinate, direction)
 					board.turn = "B"
 
@@ -373,7 +376,7 @@ class Board():
 					if (((wval + 1) >= self.width) | (hval + 1 >= self.height)):
 						print (self.error.OutofBounds)
 						coordinate = raw_input("Please enter piece to move: ")
-						direction = input("Which direction would you like to move? ")
+						direction = raw_input("Which direction would you like to move? ")
 						self.moveWhite(coordinate, direction)
 						board.turn = "B"
 
@@ -388,7 +391,7 @@ class Board():
 					elif (self.board[hval + 1][wval + 1].startswith("W") | self.board[hval + 1][wval + 1].startswith("K")):
 						print(self.error.OccupiedSpace)
 						coordinate = raw_input("Please enter piece to move: ")
-						direction = input("Which direction would you like to move? ")
+						direction = raw_input("Which direction would you like to move? ")
 						self.moveWhite(coordinate, direction)
 						board.turn = "B"
 					# Instigate jump
@@ -396,27 +399,28 @@ class Board():
 						if ((wval + 2) >= self.width) | ((hval + 2) >= self.height):
 							print (self.error.OutofBounds)
 							coordinate = raw_input("Please enter piece to move: ")
-							direction = input("Which direction would you like to move? ")
+							direction = raw_input("Which direction would you like to move? ")
 							self.moveWhite(coordinate, direction)
 							board.turn = "B"
 						elif (self.board[hval + 2][wval + 2].startswith("B") | self.board[hval + 2][wval + 2].startswith("Q")):
 							print (self.error.OccupiedSpace)
 							coordinate = raw_input("Please enter piece to move: ")
-							direction = input("Which direction would you like to move? ")
+							direction = raw_input("Which direction would you like to move? ")
 							self.moveWhite(coordinate, direction)
 							turn = "B"
 						elif (self.board[hval + 2][wval + 2] == "  "):
 							print (self.error.MustJump)
 							self.board[hval + 2][wval + 2] = self.board[hval][wval]
 							self.board[hval + 1][wval + 1] = "  "
+							self.board[hval][wval] = "  "
 							board.blackPieces -= 1
 							board.printboard()
 							board.turn = "B"
 
 			else:
-				print (self.error.InvalidMove)
+				print (self.error.InvalidInput)
 				coordinate = raw_input("Please enter piece to move: ")
-				direction = input("Which direction would you like to move? ")
+				direction = raw_input("Which direction would you like to move? ")
 				self.moveWhite(coordinate, direction)
 
 			#get new location of the checker
@@ -482,27 +486,18 @@ class Board():
 						elif(self.board[i + 1][j - 1].startswith("W")):
 							j += 1
 							continue
-					
-					#Move left if a left move is available.
-					elif((self.board[i + 1][j - 1] == "  ")):
-						hval = i
-						wval = j
-						self.board[i + 1][j - 1] = self.board[hval][wval]
-						self.board[hval][wval] = "  "
-						self.printboard()
-						board.turn = "W"
-						return
-					#Else if right move is available.					
-					elif((self.board[i + 1][j + 1] == " ")):
-						hval = i
-						wval = j
-						self.board[i + 1][j + 1] = self.board[hval][wval]
-						self.board[hval][wval] = "  "
-						self.printboard()
-						board.turn = "W"
-						return
-					#If left space is occupied by white piece or black piece, and right move is available, move right.					
-					elif(self.board[i + 1][j - 1].startswith("W") or self.board[i + 1][j - 1].startswith("B")):
+					if(i + 1 < self.height and j - 1 >= 0):
+						#Move left if a left move is available.
+						if((self.board[i + 1][j - 1] == "  ")):
+							hval = i
+							wval = j
+							self.board[i + 1][j - 1] = self.board[hval][wval]
+							self.board[hval][wval] = "  "
+							self.printboard()
+							board.turn = "W"
+							return
+					if(i + 1 < self.height and j + 1 < self.width):					
+						#Else if right move is available.					
 						if((self.board[i + 1][j + 1] == "  ")):
 							hval = i
 							wval = j
@@ -511,12 +506,23 @@ class Board():
 							self.printboard()
 							board.turn = "W"
 							return
-						else:
-							break
+					#If left space is occupied by white piece or black piece, and right move is available, move right.					
+					elif(self.board[i + 1][j - 1].startswith("W") or self.board[i + 1][j - 1].startswith("B")):
+						if(i + 1 < self.height and j + 1 < self.width):
+							if((self.board[i + 1][j + 1] == "  ")):
+								hval = i
+								wval = j
+								self.board[i + 1][j + 1] = self.board[hval][wval]
+								self.board[hval][wval] = "  "
+								self.printboard()
+								board.turn = "W"
+								return
+							else:
+								break
 
-					#If right space is occupied, and left is wall, move to next piece				
+					#If right space is occupied, and left is available, move to next piece				
 					elif(self.board[i + 1][j + 1].startswith("W") or self.board[i + 1][j + 1].startswith("B")):
-						if((j - 1) < 0):
+						if(i + 1 < self.height and (j - 1) >= 0):
 							if(self.board[i + 1][j - 1] == "  "):
 								hval = i
 								wval = j
@@ -545,45 +551,49 @@ class Board():
 				if(self.board[i][j].startswith("B") or self.board[i][j].startswith("Q")):
 					#Boundary checking for left side.					
 					if((j - 1) < 0):
-						#If space occupied by player piece, check for available jump.			
-						if(self.board[i + 1][j + 1].startswith("W")):
-							if((self.board[i + 2][j + 2] == "  ")):
-								hval = i
-								wval = j
-								#Create queen piece for black.				
-								if hval + 2 == 7:
-									self.board[hval][wval] = self.kingme(self.board[hval][wval])								
-								self.board[i + 2][j + 2] = self.board[hval][wval]
-								self.board[hval][wval] = "  "
-								self.board[i + 1][j + 1] = "  "
-								board.whitePieces -= 1									
-								self.printboard()
-								board.turn = "W"
-								return 1
+						#Boundary check for bottom right.
+						if(i + 1 < self.height and j + 1 < self.width):						
+							#If space occupied by player piece, check for available jump.			
+							if(self.board[i + 1][j + 1].startswith("W") or self.board[i + 1][j + 1].startswith("K")):
+								if((self.board[i + 2][j + 2] == "  ")):
+									hval = i
+									wval = j
+									#Create queen piece for black.				
+									if hval + 2 == 7:
+										self.board[hval][wval] = self.kingme(self.board[hval][wval])								
+									self.board[i + 2][j + 2] = self.board[hval][wval]
+									self.board[hval][wval] = "  "
+									self.board[i + 1][j + 1] = "  "
+									board.whitePieces -= 1									
+									self.printboard()
+									board.turn = "W"
+									return 1
 					#Boundary checking for right side.					
 					if((j + 1) >= self.width):
-						#If space occupied by player piece, check for available jump.
-						if(self.board[i + 1][j - 1].startswith("W")):
-							if((self.board[i + 2][j - 2] == "  ")):
-								hval = i
-								wval = j
-								#Create queen piece for black.				
-								if hval + 2 == 7:
-									self.board[hval][wval] = self.kingme(self.board[hval][wval])								
-								self.board[i + 2][j - 2] = self.board[hval][wval]
-								self.board[hval][wval] = "  "
-								self.board[i + 1][j - 1] = "  "
-								board.whitePieces -= 1									
-								self.printboard()
-								board.turn = "W"
-								return 1
+						#Boundary checking for bottom left.
+						if(i + 1 < self.height and j - 1 <= 0):						
+							#If space occupied by player piece, check for available jump.
+							if(self.board[i + 1][j - 1].startswith("W") or self.board[i + 1][j - 1].startswith("K")):
+								if((self.board[i + 2][j - 2] == "  ")):
+									hval = i
+									wval = j
+									#Create queen piece for black.				
+									if hval + 2 == 7:
+										self.board[hval][wval] = self.kingme(self.board[hval][wval])								
+									self.board[i + 2][j - 2] = self.board[hval][wval]
+									self.board[hval][wval] = "  "
+									self.board[i + 1][j - 1] = "  "
+									board.whitePieces -= 1									
+									self.printboard()
+									board.turn = "W"
+									return 1
 					if(((j - 1) != -1) and (i + 1 != 8)):					
 						#If left space is occupied, and a jump is available, take the jump.				
-						if(self.board[i + 1][j - 1].startswith("W")):
+						if(self.board[i + 1][j - 1].startswith("W") or self.board[i + 1][j - 1].startswith("K")):
 							#Boundary checking for left jump; if out of range, check right move.
 							if(i + 2 < self.height and j - 2 < 0):
 								#If a jump is available to the right, check for valid move.
-								if(self.board[i + 1][j + 1].startswith("W")):									
+								if(self.board[i + 1][j + 1].startswith("W") or self.board[i + 1][j + 1].startswith("K")):									
 									if((self.board[i + 2][j + 2] == "  ")):
 										hval = i
 										wval = j
@@ -599,7 +609,7 @@ class Board():
 										return 1						
 							
 								#Else if space is taken by black piece, move to next piece for analysis.
-								elif(self.board[i + 1][j + 1].startswith("B")):
+								elif(self.board[i + 1][j + 1].startswith("B") or self.board[i + 1][j + 1].startswith("Q")):
 									j += 1
 									continue
 								
@@ -620,11 +630,11 @@ class Board():
 									return 1
 					if((j + 1 != self.width) and (i + 1 != 8)):					
 						#If right space is occupied, and a jump is available, take the jump.				
-						if(self.board[i + 1][j + 1].startswith("W")):
+						if(self.board[i + 1][j + 1].startswith("W") or self.board[i + 1][j + 1].startswith("K")):
 							#Boundary checking for right jump; if out of range, check left move.
 							if(i + 2 < self.height and j + 2 >= self.width):
 								#If a jump is available to the left, check for valid move.
-								if(self.board[i + 1][j - 1].startswith("W")):
+								if(self.board[i + 1][j - 1].startswith("W") or self.board[i + 1][j - 1].startswith("K")):
 									if((self.board[i + 2][j - 2] == "  ")):
 										hval = i
 										wval = j
@@ -640,7 +650,7 @@ class Board():
 										return 1
 							
 								#Else if space is taken by black piece, move to next piece for analysis.
-								elif(self.board[i + 1][j - 1].startswith("B")):
+								elif(self.board[i + 1][j - 1].startswith("B") or self.board[i + 1][j - 1].startswith("Q")):
 									j += 1
 									continue						
 							#Else if within range, check for jump.						
@@ -657,8 +667,86 @@ class Board():
 									board.whitePieces -= 1							
 									self.printboard()
 									board.turn = "W"
-									return 1				
-				j += 1
+									return 1
+					
+					#Movement abilities for Queens only 
+					if(self.board[i][j].startswith("Q")):
+						#If left space is occupied, and a jump is available, take the jump.				
+						if(self.board[i - 1][j - 1].startswith("W") or self.board[i - 1][j - 1].startswith("K")):						
+							#Boundary checking for left up jump; if out of range, check right move.
+							if(i - 2 < 0 or j - 2 < 0):
+								#Else if a jump is available to the right, check for valid move.
+								if(self.board[i - 1][j + 1].startswith("W") or self.board[i - 1][j + 1].startswith("K")):
+									if((self.board[i - 2][j + 2] == "  ")):
+										hval = i
+										wval = j
+										self.board[i - 2][j + 2] = self.board[hval][wval]
+										self.board[hval][wval] = "  "
+										self.board[i - 1][j + 1] = "  "
+										board.whitePieces -= 1									
+										self.printboard()
+										board.turn = "W"
+										return 1
+						
+								#Else if space is taken by black piece, move to next piece for analysis.
+								elif(self.board[i - 1][j + 1].startswith("B") or self.board[i - 1][j + 1].startswith("Q") ):
+									j += 1
+									continue
+							
+							#Else if move is valid, make jump.						
+							elif((self.board[i - 2][j - 2] == "  ")):
+								hval = i
+								wval = j
+								self.board[i - 2][j - 2] = self.board[hval][wval]
+								self.board[hval][wval] = "  "
+								self.board[i - 1][j - 1] = "  "
+								board.whitePieces -= 1							
+								self.printboard()
+								board.turn = "W"
+								return	1
+					
+						#If right up space is occupied, and a jump is available, take the jump.				
+						elif(self.board[i - 1][j + 1].startswith("W") or self.board[i - 1][j + 1].startswith("K")):
+							#Boundary checking for right up jump; if out of range, check left move.
+							if(j + 2 >= self.width):
+								if((self.board[i - 1][j - 1] == "  ")):
+									hval = i
+									wval = j
+									self.board[i - 1][j - 1] = self.board[hval][wval]
+									self.board[hval][wval] = "  "
+									self.printboard()
+									board.turn = "W"
+									return 1
+						
+								#Else if space is taken by black piece, move to next piece for analysis.
+								elif(self.board[i - 1][j - 1].startswith("B") or self.board[i - 1][j - 1].startswith("Q")):
+									j += 1
+									continue
+								#Else if a jump is available to the left, check for valid move.
+								elif(self.board[i - 1][j - 1].startswith("W") or self.board[i - 1][j - 1].startswith("K")):
+									if((self.board[i - 2][j - 2] == "  ")):
+										hval = i
+										wval = j
+										self.board[i - 2][j - 2] = self.board[hval][wval]
+										self.board[hval][wval] = "  "
+										self.board[i - 1][j - 1] = "  "
+										board.whitePieces -= 1									
+										self.printboard()
+										board.turn = "W"
+										return 1
+							#Else if move is valid, make jump.						
+							elif((self.board[i - 2][j + 2] == "  ")):
+								hval = i
+								wval = j
+								self.board[i - 2][j + 2] = self.board[hval][wval]
+								self.board[hval][wval] = "  "
+								self.board[i - 1][j + 1] = "  "
+								board.whitePieces -= 1							
+								self.printboard()
+								board.turn = "W"
+								return 1
+
+				j += 1			
 			i -= 1
 		return 0	
 					
@@ -672,7 +760,7 @@ class Board():
 		while i >= 0:
 			j = 0;
 			while j < self.width:
-				if self.board[i][j].startswith("B"):
+				if self.board[i][j].startswith("B") or self.board[i][j].startswith("Q"):
 					jumpCheck = self.jumpCheck()
 					if(jumpCheck == 1):
 						return			
@@ -692,21 +780,22 @@ class Board():
 								board.turn = "W"
 								return
 							#Else, if space occupied by player piece, check for available jump.			
-							elif(self.board[i + 1][j + 1].startswith("W")):
-								if((self.board[i + 2][j + 2] == "  ")):
-										hval = i
-										wval = j
-										#Create queen piece for black.				
-										if hval + 2 == 7:
-											self.board[hval][wval] = self.kingme(self.board[hval][wval])
-										self.board[i + 2][j + 2] = self.board[hval][wval]
-										self.board[hval][wval] = "  "
-										self.board[i + 1][j + 1] = "  "
-										board.whitePieces -= 1									
-										self.printboard()
-										board.turn = "W"
-										return
-							elif(self.board[i + 1][j + 1].startswith("B")):
+							elif(self.board[i + 1][j + 1].startswith("W") or self.board[i + 1][j + 1].startswith("K")):
+								if(i + 2 < self.height):								
+									if((self.board[i + 2][j + 2] == "  ")):
+											hval = i
+											wval = j
+											#Create queen piece for black.				
+											if hval + 2 == 7:
+												self.board[hval][wval] = self.kingme(self.board[hval][wval])
+											self.board[i + 2][j + 2] = self.board[hval][wval]
+											self.board[hval][wval] = "  "
+											self.board[i + 1][j + 1] = "  "
+											board.whitePieces -= 1									
+											self.printboard()
+											board.turn = "W"
+											return
+							elif(self.board[i + 1][j + 1].startswith("B") or self.board[i + 1][j + 1].startswith("Q")):
 								j += 1
 								continue
 						#Boundary checking for right side.					
@@ -724,29 +813,30 @@ class Board():
 								board.turn = "W"
 								return
 							#Else, if space occupied by player piece, check for available jump.
-							elif(self.board[i + 1][j - 1].startswith("W")):
-								if((self.board[i + 2][j - 2] == "  ")):
-										hval = i
-										wval = j
-										#Create queen piece for black.				
-										if hval + 2 == 7:
-											self.board[hval][wval] = self.kingme(self.board[hval][wval])                                                                   
-										self.board[i + 2][j - 2] = self.board[hval][wval]
-										self.board[hval][wval] = "  "
-										self.board[i + 1][j - 1] = "  "
-										board.whitePieces -= 1									
-										self.printboard()
-										board.turn = "W"
-										return
-							elif(self.board[i + 1][j - 1].startswith("B")):
+							elif(self.board[i + 1][j - 1].startswith("W") or self.board[i + 1][j - 1].startswith("K")):
+								if(i + 2 < self.height):								
+									if((self.board[i + 2][j - 2] == "  ")):
+											hval = i
+											wval = j
+											#Create queen piece for black.				
+											if hval + 2 == 7:
+												self.board[hval][wval] = self.kingme(self.board[hval][wval])                                                                   
+											self.board[i + 2][j - 2] = self.board[hval][wval]
+											self.board[hval][wval] = "  "
+											self.board[i + 1][j - 1] = "  "
+											board.whitePieces -= 1									
+											self.printboard()
+											board.turn = "W"
+											return
+							elif(self.board[i + 1][j - 1].startswith("B") or self.board[i + 1][j - 1].startswith("Q")):
 								j += 1
 								continue
-						#If left space is occupied, and a jump is available, take the jump.				
-						if(self.board[i + 1][j - 1].startswith("W")):
+						#If left space is occupied, and a jump is available, take the jump.										
+						if(self.board[i + 1][j - 1].startswith("W") or self.board[i + 1][j - 1].startswith("K")):
 							#Boundary checking for left jump; if out of range, check right move.
 							if(i + 2 < self.height and j - 2 < 0):
 								#If a jump is available to the right, check for valid move.
-								if(self.board[i + 1][j + 1].startswith("W")):
+								if(self.board[i + 1][j + 1].startswith("W") or self.board[i + 1][j + 1].startswith("K")):
 									if((self.board[i + 2][j + 2] == "  ")):
 										hval = i
 										wval = j
@@ -773,7 +863,7 @@ class Board():
 									return	
 						
 								#Else if space is taken by black piece, move to next piece for analysis.
-								elif(self.board[i + 1][j + 1].startswith("B")):
+								elif(self.board[i + 1][j + 1].startswith("B") or self.board[i + 1][j + 1].startswith("Q")):
 									j += 1
 									continue
 							elif((not(i + 2) >= self.height) and (not(j - 2) < 0)):							
@@ -792,11 +882,11 @@ class Board():
 									board.turn = "W"
 									return									
 						#If right space is occupied, and a jump is available, take the jump.				
-						if(self.board[i + 1][j + 1].startswith("W")):
+						if(self.board[i + 1][j + 1].startswith("W") or self.board[i + 1][j + 1].startswith("K")):
 							#Boundary checking for right jump; if out of range, check left move.
 							if(i + 2 < self.height and j + 2 >= self.width):
 								#If a jump is available to the left, check for valid move.
-								if(self.board[i + 1][j - 1].startswith("W")):
+								if(self.board[i + 1][j - 1].startswith("W") or self.board[i + 1][j - 1].startswith("W")):
 									if((self.board[i + 2][j - 2] == "  ")):
 										hval = i
 										wval = j
@@ -823,7 +913,7 @@ class Board():
 									return	
 							
 								#Else if space is taken by black piece, move to next piece for analysis.
-								elif(self.board[i + 1][j - 1].startswith("B")):
+								elif(self.board[i + 1][j - 1].startswith("B") or self.board[i + 1][j - 1].startswith("Q")):
 									j += 1
 									continue
 							elif((not(i + 2) >= self.height) and (not(j + 2) >= self.width)):
@@ -867,13 +957,520 @@ class Board():
 							board.turn = "W"
 							return	
 
+						#Boundary checking for Queens
+						if(self.board[i][j].startswith("Q")):
+							#Boundary check for bottom of board
+							if((i + 1) >= self.height):
+								#If Left space is open, move there.						
+								if((self.board[i - 1][j - 1] == "  ")):
+									check = board.checkMove(i - 1, j - 1)
+									if(check == 1):							
+										hval = i
+										wval = j
+										self.board[i - 1][j - 1] = self.board[hval][wval]
+										self.board[hval][wval] = "  "
+										self.printboard()
+										board.turn = "W"
+										return
+									elif(check == 0):									
+										pass
+								#Else, if space occupied by player piece, check for available jump.
+								elif(self.board[i - 1][j - 1].startswith("W") or self.board[i - 1][j - 1].startswith("W")):
+									if((self.board[i - 2][j - 2] == "  ")):
+											hval = i
+											wval = j
+											self.board[i - 2][j - 2] = self.board[hval][wval]
+											self.board[hval][wval] = "  "
+											self.board[i - 1][j - 1] = "  "
+											board.whitePieces -= 1									
+											self.printboard()
+											board.turn = "W"
+											return					
+							#Boundary check for top of board
+							if((i - 1) < 0):
+								#If up right move is available, take it.						
+								if((self.board[i + 1][j + 1] == "  ")):
+									check = board.checkMove(i + 1, j + 1)							
+									if(check == 1):							
+										hval = i
+										wval = j
+										self.board[i + 1][j + 1] = self.board[hval][wval]
+										self.board[hval][wval] = "  "
+										self.printboard()
+										board.turn = "W"
+										return
+									elif(check == 0):
+										pass
+								#Else, if space occupied by player piece, check for available jump.			
+								elif(self.board[i + 1][j + 1].startswith("W") or self.board[i + 1][j + 1].startswith("K")):
+									if((self.board[i + 2][j + 2] == "  ")):
+											hval = i
+											wval = j
+											self.board[i + 2][j + 2] = self.board[hval][wval]
+											self.board[hval][wval] = "  "
+											self.board[i + 1][j + 1] = "  "
+											board.whitePieces -= 1									
+											self.printboard()
+											board.turn = "W"
+											return
+
 						#Movement abilities for Queens only 
 						if(self.board[i][j].startswith("Q")):
 							#If left space is occupied, and a jump is available, take the jump.				
 							if(self.board[i - 1][j - 1].startswith("W") or self.board[i - 1][j - 1].startswith("K")):						
 								#Boundary checking for left up jump; if out of range, check right move.
-								if(j - 2 < 0):
-									if((self.board[i - 1][j + 1] == "  ")):								
+								if(i - 2 < 0 or j - 2 < 0):
+									#Else if a jump is available to the right, check for valid move.
+									if(self.board[i - 1][j + 1].startswith("W") or self.board[i - 1][j + 1].startswith("K")):
+										if((self.board[i - 2][j + 2] == "  ")):
+											hval = i
+											wval = j
+											self.board[i - 2][j + 2] = self.board[hval][wval]
+											self.board[hval][wval] = "  "
+											self.board[i - 1][j + 1] = "  "
+											board.whitePieces -= 1									
+											self.printboard()
+											board.turn = "W"
+											return
+									elif((self.board[i - 1][j + 1] == "  ")):								
+										hval = i
+										wval = j
+										self.board[i - 1][j + 1] = self.board[hval][wval]
+										self.board[hval][wval] = "  "								
+										self.printboard()
+										board.turn = "W"
+										return	
+							
+									#Else if space is taken by black piece or queen, move to next piece for analysis.
+									elif(self.board[i - 1][j + 1].startswith("B") or self.board[i - 1][j + 1].startswith("Q")):
+										j += 1
+										continue
+								
+								#Else if move is valid, make jump.						
+								elif((self.board[i - 2][j - 2] == "  ")):
+									hval = i
+									wval = j
+									self.board[i - 2][j - 2] = self.board[hval][wval]
+									self.board[hval][wval] = "  "
+									self.board[i - 1][j - 1] = "  "
+									board.whitePieces -= 1							
+									self.printboard()
+									board.turn = "W"
+									return	
+						
+							#If right up space is occupied, and a jump is available, take the jump.				
+							elif(self.board[i - 1][j + 1].startswith("W") or self.board[i - 1][j + 1].startswith("K")):
+								#Boundary checking for right up jump; if out of range, check left move.
+								if(j + 2 >= self.width):
+									if((self.board[i - 1][j - 1] == "  ")):
+										hval = i
+										wval = j
+										self.board[i - 1][j - 1] = self.board[hval][wval]
+										self.board[hval][wval] = "  "
+										self.printboard()
+										board.turn = "W"
+										return	
+							
+									#Else if space is taken by black piece or queen, move to next piece for analysis.
+									elif(self.board[i - 1][j - 1].startswith("B") or self.board[i - 1][j - 1].startswith("Q")):
+										j += 1
+										continue
+									#Else if a jump is available to the left, check for valid move.
+									elif(self.board[i - 1][j - 1].startswith("W") or self.board[i - 1][j - 1].startswith("K")):
+										if((self.board[i - 2][j - 2] == "  ")):
+											hval = i
+											wval = j
+											self.board[i - 2][j - 2] = self.board[hval][wval]
+											self.board[hval][wval] = "  "
+											self.board[i - 1][j - 1] = "  "
+											board.whitePieces -= 1									
+											self.printboard()
+											board.turn = "W"
+											return
+								#Else if move is valid, make jump.						
+								elif((self.board[i - 2][j + 2] == "  ")):
+									hval = i
+									wval = j
+									self.board[i - 2][j + 2] = self.board[hval][wval]
+									self.board[hval][wval] = "  "
+									self.board[i - 1][j + 1] = "  "
+									board.whitePieces -= 1							
+									self.printboard()
+									board.turn = "W"
+									return	
+
+							#Else move up left if a left move is available.
+							elif((self.board[i - 1][j - 1] == "  ")):					
+									hval = i
+									wval = j
+									self.board[i - 1][j - 1] = self.board[hval][wval]
+									self.board[hval][wval] = "  "
+									self.printboard()
+									board.turn = "W"
+									return
+								
+							#Else if move up right if a right move is available.
+							elif((self.board[i - 1][j + 1] == "  ")):
+														
+									hval = i
+									wval = j
+									self.board[i - 1][j + 1] = self.board[hval][wval]
+									self.board[hval][wval] = "  "
+									self.printboard()
+									board.turn = "W"
+									return									
+					
+				j += 1
+			i -= 1
+		
+	 	
+
+	def checkMove(self, hval, wval):
+		if(self.board[hval][wval] == "  "):
+			pass		
+		else:
+			return 0
+
+		if((wval == 0) or (hval == 0) or (wval == self.width-1) or (hval == self.height -1)):
+			return 1
+		
+		if(self.board[hval + 1][wval - 1].startswith("W") == False and self.board[hval + 1][wval - 1].startswith("K") == False):
+			pass
+		else:	
+			return 0
+
+		if(self.board[hval + 1][wval +1 ].startswith("W") == False and self.board[hval + 1][wval + 1].startswith("K") == False):
+			pass
+		else:
+			return 0
+		
+		if(self.board[hval - 1][wval - 1].startswith("K") == False):
+			pass
+		else:
+			return 0
+		
+		if(self.board[hval - 1][wval + 1].startswith("K") == False):
+			return 1
+		
+		else:
+			return 0
+
+		if(self.board[hval - 1][wval + 1] != "  " and self.board[hval + 1][wval - 1] != "  "):
+			return 1
+		else:	
+			return 0
+
+		
+		
+		
+
+	def hardMode(self):
+		#Looks through board state to find first piece with viable movement 
+		i = 7
+		j = 0
+		wval = 0
+		hval = 0
+		
+		while i >= 0:
+			j = 0;
+			while j < self.width:				
+				if self.board[i][j].startswith("B") or self.board[i][j].startswith("Q"):
+					jumpCheck = self.jumpCheck() 
+					if(jumpCheck == 1):
+						return			
+					else:											
+						#Boundary checking for left side.					
+						if((j - 1) < 0):
+							#If right move is available, take it.						
+							if((self.board[i + 1][j + 1] == "  ")):
+								check = board.checkMove(i + 1, j + 1)									
+								if(check == 1):														
+									hval = i
+									wval = j
+									#Create queen piece for black.				
+									if hval + 1 == 7:
+										self.board[hval][wval] = self.kingme(self.board[hval][wval])								
+									self.board[i + 1][j + 1] = self.board[hval][wval]
+									self.board[hval][wval] = "  "								
+									self.printboard()
+									board.turn = "W"
+									return
+								elif(check == 0):									
+									j += 1
+									continue
+							#Else, if space occupied by player piece, check for available jump.			
+							elif(self.board[i + 1][j + 1].startswith("W") or self.board[i + 1][j + 1].startswith("K")):
+								if((self.board[i + 2][j + 2] == "  ")):
+										hval = i
+										wval = j
+										#Create queen piece for black.				
+										if hval + 2 == 7:
+											self.board[hval][wval] = self.kingme(self.board[hval][wval])
+										self.board[i + 2][j + 2] = self.board[hval][wval]
+										self.board[hval][wval] = "  "
+										self.board[i + 1][j + 1] = "  "
+										board.whitePieces -= 1									
+										self.printboard()
+										board.turn = "W"
+										return
+							elif(self.board[i + 1][j + 1].startswith("B") or self.board[i + 1][j + 1].startswith("Q")):
+								j += 1
+								continue
+						#Boundary checking for right side.					
+						if((j + 1) >= self.width):
+							#If Left space is open, move there.						
+							if((self.board[i + 1][j - 1] == "  ")):
+								check = board.checkMove(i + 1, j - 1)
+								if(check == 1):								
+									hval = i
+									wval = j
+									#Create queen piece for black.				
+									if hval + 1 == 7:
+										self.board[hval][wval] = self.kingme(self.board[hval][wval])								
+									self.board[i + 1][j - 1] = self.board[hval][wval]
+									self.board[hval][wval] = "  "
+									self.printboard()
+									board.turn = "W"
+									return
+								elif(check == 0):
+									self.forceMove = 1
+									pass
+							#Else, if space occupied by player piece, check for available jump.
+							elif(self.board[i + 1][j - 1].startswith("W") or self.board[i + 1][j - 1].startswith("K")):
+								if((self.board[i + 2][j - 2] == "  ")):
+										hval = i
+										wval = j
+										#Create queen piece for black.				
+										if hval + 2 == 7:
+											self.board[hval][wval] = self.kingme(self.board[hval][wval])                                                                   
+										self.board[i + 2][j - 2] = self.board[hval][wval]
+										self.board[hval][wval] = "  "
+										self.board[i + 1][j - 1] = "  "
+										board.whitePieces -= 1									
+										self.printboard()
+										board.turn = "W"
+										return
+							elif(self.board[i + 1][j - 1].startswith("B")):
+								j += 1
+								continue
+						
+						#Boundary checking for Queens
+						if(self.board[i][j].startswith("Q")):
+							#Boundary check for bottom of board
+							if((i + 1) >= self.height):
+								#If Left space is open, move there.						
+								if((self.board[i - 1][j - 1] == "  ")):
+									check = board.checkMove(i - 1, j - 1)
+									if(check == 1):							
+										hval = i
+										wval = j
+										self.board[i - 1][j - 1] = self.board[hval][wval]
+										self.board[hval][wval] = "  "
+										self.printboard()
+										board.turn = "W"
+										return
+									elif(check == 0):									
+										pass
+								#Else, if space occupied by player piece, check for available jump.
+								elif(self.board[i - 1][j - 1].startswith("W") or self.board[i - 1][j - 1].startswith("W")):
+									if((self.board[i - 2][j - 2] == "  ")):
+											hval = i
+											wval = j
+											self.board[i - 2][j - 2] = self.board[hval][wval]
+											self.board[hval][wval] = "  "
+											self.board[i - 1][j - 1] = "  "
+											board.whitePieces -= 1									
+											self.printboard()
+											board.turn = "W"
+											return					
+							#Boundary check for top of board
+							if((i - 1) < 0):
+								#If up right move is available, take it.						
+								if((self.board[i + 1][j + 1] == "  ")):
+									check = board.checkMove(i + 1, j + 1)							
+									if(check == 1):							
+										hval = i
+										wval = j
+										self.board[i + 1][j + 1] = self.board[hval][wval]
+										self.board[hval][wval] = "  "
+										self.printboard()
+										board.turn = "W"
+										return
+									elif(check == 0):
+										pass
+								#Else, if space occupied by player piece, check for available jump.			
+								elif(self.board[i + 1][j + 1].startswith("W") or self.board[i + 1][j + 1].startswith("K")):
+									if((self.board[i + 2][j + 2] == "  ")):
+											hval = i
+											wval = j
+											self.board[i + 2][j + 2] = self.board[hval][wval]
+											self.board[hval][wval] = "  "
+											self.board[i + 1][j + 1] = "  "
+											board.whitePieces -= 1									
+											self.printboard()
+											board.turn = "W"
+											return
+						#Boundary  check
+						if(i + 1 < self.height and j - 1 < 0):
+								#If left space is occupied, and a jump is available, take the jump.				
+								if(self.board[i + 1][j - 1].startswith("W") or self.board[i + 1][j - 1].startswith("K")):
+									#Boundary checking for left jump; if out of range, check right move.
+									if(i + 2 < self.height and j - 2 < 0):
+										#If a jump is available to the right, check for valid move.
+										if(self.board[i + 1][j + 1].startswith("W") or self.board[i + 1][j + 1].startswith("K")):
+											if((self.board[i + 2][j + 2] == "  ")):
+												hval = i
+												wval = j
+												#Create queen piece for black.				
+												if hval  + 2 == 7:
+													self.board[hval][wval] = self.kingme(self.board[hval][wval])										
+												self.board[i + 2][j + 2] = self.board[hval][wval]
+												self.board[hval][wval] = "  "
+												self.board[i + 1][j + 1] = "  "
+												board.whitePieces -= 1									
+												self.printboard()
+												board.turn = "W"
+												return								
+										elif((self.board[i + 1][j + 1] == "  ")):
+											hval = i
+											wval = j
+											#Create queen piece for black.				
+											if hval + 1 == 7:
+												self.board[hval][wval] = self.kingme(self.board[hval][wval])									
+											self.board[i + 1][j + 1] = self.board[hval][wval]
+											self.board[hval][wval] = "  "								
+											self.printboard()
+											board.turn = "W"
+											return	
+						
+										#Else if space is taken by black piece, move to next piece for analysis.
+										elif(self.board[i + 1][j + 1].startswith("B")):
+											j += 1
+											continue
+									elif((not(i + 2) >= self.height) and (not(j - 2) < 0)):							
+										#Else if move is valid, make jump.						
+										if((self.board[i + 2][j - 2] == "  ")):
+											hval = i
+											wval = j
+											#Create queen piece for black.				
+											if hval + 2 == 7:
+												self.board[hval][wval] = self.kingme(self.board[hval][wval])									
+											self.board[i + 2][j - 2] = self.board[hval][wval]
+											self.board[hval][wval] = "  "
+											self.board[i + 1][j - 1] = "  "
+											board.whitePieces -= 1							
+											self.printboard()
+											board.turn = "W"
+											return									
+						
+						#Boundary check.						
+						if(i + 1 < self.height and j + 1 < self.width):						
+							#If right space is occupied, and a jump is available, take the jump.				
+							if(self.board[i + 1][j + 1].startswith("W") or self.board[i + 1][j + 1].startswith("K")):
+								#Boundary checking for right jump; if out of range, check left move.
+								if(i + 2 < self.height and j + 2 >= self.width):
+									#If a jump is available to the left, check for valid move.
+									if(self.board[i + 1][j - 1].startswith("W") or self.board[i + 1][j - 1].startswith("W")):
+										if((self.board[i + 2][j - 2] == "  ")):
+											hval = i
+											wval = j
+											#Create queen piece for black.				
+											if hval + 2 == 7:
+												self.board[hval][wval] = self.kingme(self.board[hval][wval])											
+											self.board[i + 2][j - 2] = self.board[hval][wval]
+											self.board[hval][wval] = "  "
+											self.board[i + 1][j - 1] = "  "
+											board.whitePieces -= 1									
+											self.printboard()
+											board.turn = "W"
+											return								
+									elif((self.board[i + 1][j - 1] == "  ")):
+										hval = i
+										wval = j
+										#Create queen piece for black.				
+										if hval + 1 == 7:
+											self.board[hval][wval] = self.kingme(self.board[hval][wval])									
+										self.board[i + 1][j - 1] = self.board[hval][wval]
+										self.board[hval][wval] = "  "
+										self.printboard()
+										board.turn = "W"
+										return	
+							
+									#Else if space is taken by black piece, move to next piece for analysis.
+									elif(self.board[i + 1][j - 1].startswith("B")):
+										j += 1
+										continue
+								elif((not(i + 2) >= self.height) and (not(j + 2) >= self.width)):
+									#Else if move is valid, make jump.						
+									if((self.board[i + 2][j + 2] == "  ")):
+										hval = i
+										wval = j
+										#Create queen piece for black.				
+										if hval + 2 == 7:
+											self.board[hval][wval] = self.kingme(self.board[hval][wval])									
+										self.board[i + 2][j + 2] = self.board[hval][wval]
+										self.board[hval][wval] = "  "
+										self.board[i + 1][j + 1] = "  "
+										board.whitePieces -= 1							
+										self.printboard()
+										board.turn = "W"
+										return	
+						#Boundary checking
+						if(i + 1 < self.height and j - 1 >= 0):
+							#Else move left if a left move is available.
+							if((self.board[i + 1][j - 1] == "  ")):
+								check = board.checkMove(i + 1, j - 1)
+								if(check == 1):							
+									hval = i
+									wval = j
+									#Create queen piece for black.				
+									if hval + 1 == 7:
+										self.board[hval][wval] = self.kingme(self.board[hval][wval])							
+									self.board[i + 1][j - 1] = self.board[hval][wval]
+									self.board[hval][wval] = "  "
+									self.printboard()
+									board.turn = "W"
+									return
+								elif(check == 0):
+									pass
+						#Boundary checking right move.
+						elif(i + 1 < self.height and j + 1 < self.width):						
+							#Else if move right if a right move is available.
+							if((self.board[i + 1][j + 1] == "  ")):
+								check = board.checkMove(i + 1, j - 1)
+								if(check == 1):							
+									hval = i
+									wval = j
+									#Create queen piece for black.				
+									if hval + 1 == 7:
+										self.board[hval][wval] = self.kingme(self.board[hval][wval])							
+									self.board[i + 1][j + 1] = self.board[hval][wval]
+									self.board[hval][wval] = "  "
+									self.printboard()
+									board.turn = "W"
+									return
+								elif(check == 0):
+									pass
+
+						#Movement abilities for Queens only 
+						if(self.board[i][j].startswith("Q")):
+							#If left space is occupied, and a jump is available, take the jump.				
+							if(self.board[i - 1][j - 1].startswith("W") or self.board[i - 1][j - 1].startswith("K")):						
+								#Boundary checking for left up jump; if out of range, check right move.
+								if(i - 2 < 0 or j - 2 < 0):
+									#Else if a jump is available to the right, check for valid move.
+									if(self.board[i - 1][j + 1].startswith("W") or self.board[i - 1][j + 1].startswith("K")):
+										if((self.board[i - 2][j + 2] == "  ")):
+											hval = i
+											wval = j
+											self.board[i - 2][j + 2] = self.board[hval][wval]
+											self.board[hval][wval] = "  "
+											self.board[i - 1][j + 1] = "  "
+											board.whitePieces -= 1									
+											self.printboard()
+											board.turn = "W"
+											return
+									elif((self.board[i - 1][j + 1] == "  ")):								
 										hval = i
 										wval = j
 										self.board[i - 1][j + 1] = self.board[hval][wval]
@@ -886,18 +1483,7 @@ class Board():
 									elif(self.board[i - 1][j + 1].startswith("B")):
 										j += 1
 										continue
-									#Else if a jump is available to the right, check for valid move.
-									elif(self.board[i - 1][j + 1].startswith("W") or self.board[i - 1][j + 1].startswith("K")):
-										if((self.board[i - 2][j + 2] == "  ")):
-											hval = i
-											wval = j
-											self.board[i - 2][j + 2] = self.board[hval][wval]
-											self.board[hval][wval] = "  "
-											self.board[i - 1][j + 1] = "  "
-											board.whitePieces -= 1									
-											self.printboard()
-											board.turn = "W"
-											return
+								
 								#Else if move is valid, make jump.						
 								elif((self.board[i - 2][j - 2] == "  ")):
 									hval = i
@@ -977,398 +1563,11 @@ class Board():
 									board.turn = "W"
 									return
 								elif(check == 0):
-									j += 1
-									continue									
+									pass									
 					
 				j += 1
-			i -= 1
-		
-	 	
-
-	def checkMove(self, hval, wval):
-		if(self.board[hval][wval] == "  "):
-			pass		
-		else:
-			return 0
-
-		if((wval == 0) or (hval == 0) or (wval == self.width-1) or (hval == self.height -1)):
-			return 1
-
-		if(self.board[hval + 1][wval - 1].startswith("W") == False and self.board[hval + 1][wval - 1].startswith("K") == False):
-			pass
-		else:	
-			return 0
-
-		if(self.board[hval + 1][wval +1 ].startswith("W") == False and self.board[hval + 1][wval + 1].startswith("K") == False):
-			pass
-		else:
-			return 0
-		
-		if(self.board[hval - 1][wval - 1].startswith("K") == False):
-			pass
-		else:
-			return 0
-		
-		if(self.board[hval - 1][wval + 1].startswith("K") == False):
-			return 1
-		
-		else:
-			return 0
-		
-		
-
-	def hardMode(self):
-		i = 7
-		j = 0
-		wval = 0
-		hval = 0
-		while i >= 0:
-			j = 0;
-			while j < self.width:
-				if (self.board[i][j].startswith("B") or self.board[i][j].startswith("Q")):
-					#Boundary checking for left side.					
-					if((j - 1) < 0):
-						#If right move is available, take it.						
-						if((self.board[i + 1][j + 1] == "  ")):
-							check = board.checkMove(i + 1, j + 1)							
-							if(check == 1):							
-								hval = i
-								wval = j
-								self.board[i + 1][j + 1] = self.board[hval][wval]
-								self.board[hval][wval] = "  "
-								self.printboard()
-								board.turn = "W"
-								return
-							elif(check == 0):
-								j += 1
-								continue
-						#Else, if space occupied by player piece, check for available jump.			
-						elif(self.board[i + 1][j + 1].startswith("W")):
-							if((self.board[i + 2][j + 2] == "  ")):
-									hval = i
-									wval = j
-									self.board[i + 2][j + 2] = self.board[hval][wval]
-									self.board[hval][wval] = "  "
-									self.board[i + 1][j + 1] = "  "
-									board.whitePieces -= 1									
-									self.printboard()
-									board.turn = "W"
-									return
-					#Boundary checking for right side.					
-					if((j + 1) >= self.width):
-						#If Left space is open, move there.						
-						if((self.board[i + 1][j - 1] == "  ")):
-							check = board.checkMove(i + 1, j - 1)
-							if(check == 1):							
-								hval = i
-								wval = j
-								self.board[i + 1][j - 1] = self.board[hval][wval]
-								self.board[hval][wval] = "  "
-								self.printboard()
-								board.turn = "W"
-								return
-							elif(check == 0):
-								continue
-						#Else, if space occupied by player piece, check for available jump.
-						elif(self.board[i + 1][j - 1].startswith("W")):
-							if((self.board[i + 2][j - 2] == "  ")):
-									hval = i
-									wval = j
-									self.board[i + 2][j - 2] = self.board[hval][wval]
-									self.board[hval][wval] = "  "
-									self.board[i + 1][j - 1] = "  "
-									board.whitePieces -= 1									
-									self.printboard()
-									board.turn = "W"
-									return
-					#Boundary checking for Queens
-					if(self.board[i][j].startswith("Q")):
-						#Boundary check for bottom of board
-						if((i + 1) >= self.height):
-							#If Left space is open, move there.						
-							if((self.board[i - 1][j - 1] == "  ")):
-								check = board.checkMove(i - 1, j - 1)
-								if(check == 1):							
-									hval = i
-									wval = j
-									self.board[i - 1][j - 1] = self.board[hval][wval]
-									self.board[hval][wval] = "  "
-									self.printboard()
-									board.turn = "W"
-									return
-								elif(check == 0):
-									pass
-							#Else, if space occupied by player piece, check for available jump.
-							elif(self.board[i - 1][j - 1].startswith("W") or self.board[i - 1][j - 1].startswith("W")):
-								if((self.board[i - 2][j - 2] == "  ")):
-										hval = i
-										wval = j
-										self.board[i - 2][j - 2] = self.board[hval][wval]
-										self.board[hval][wval] = "  "
-										self.board[i - 1][j - 1] = "  "
-										board.whitePieces -= 1									
-										self.printboard()
-										board.turn = "W"
-										return					
-						#Boundary check for top of board
-						if((i - 1) < 0):
-							#If up right move is available, take it.						
-							if((self.board[i + 1][j + 1] == "  ")):
-								check = board.checkMove(i + 1, j + 1)							
-								if(check == 1):							
-									hval = i
-									wval = j
-									self.board[i + 1][j + 1] = self.board[hval][wval]
-									self.board[hval][wval] = "  "
-									self.printboard()
-									board.turn = "W"
-									return
-								elif(check == 0):
-									pass
-							#Else, if space occupied by player piece, check for available jump.			
-							elif(self.board[i + 1][j + 1].startswith("W") or self.board[i + 1][j + 1].startswith("K")):
-								if((self.board[i + 2][j + 2] == "  ")):
-										hval = i
-										wval = j
-										self.board[i + 2][j + 2] = self.board[hval][wval]
-										self.board[hval][wval] = "  "
-										self.board[i + 1][j + 1] = "  "
-										board.whitePieces -= 1									
-										self.printboard()
-										board.turn = "W"
-										return
-					
-					#If left space is occupied, and a jump is available, take the jump.				
-					if(self.board[i + 1][j - 1].startswith("W") or self.board[i + 1][j - 1].startswith("K")):
-						#Boundary checking for left jump; if out of range, check right move.
-						if(j - 2 < 0):
-							if((self.board[i + 1][j + 1] == "  ")):								
-								hval = i
-								wval = j
-								self.board[i + 1][j + 1] = self.board[hval][wval]
-								self.board[hval][wval] = "  "								
-								self.printboard()
-								board.turn = "W"
-								return	
-							
-							#Else if space is taken by black piece, move to next piece for analysis.
-							elif(self.board[i + 1][j + 1].startswith("B")):
-								j += 1
-								continue
-							#Else if a jump is available to the right, check for valid move.
-							elif(self.board[i + 1][j + 1].startswith("W") or self.board[i + 1][j + 1].startswith("K")):
-								if((self.board[i + 2][j + 2] == "  ")):
-									hval = i
-									wval = j
-									self.board[i + 2][j + 2] = self.board[hval][wval]
-									self.board[hval][wval] = "  "
-									self.board[i + 1][j + 1] = "  "
-									board.whitePieces -= 1									
-									self.printboard()
-									board.turn = "W"
-									return
-						#Else if move is valid, make jump.						
-						elif((self.board[i + 2][j - 2] == "  ")):
-							hval = i
-							wval = j
-							self.board[i + 2][j - 2] = self.board[hval][wval]
-							self.board[hval][wval] = "  "
-							self.board[i + 1][j - 1] = "  "
-							board.whitePieces -= 1							
-							self.printboard()
-							board.turn = "W"
-							return			
-					#If right space is occupied, and a jump is available, take the jump.				
-					elif(self.board[i + 1][j + 1].startswith("W") or self.board[i + 1][j + 1].startswith("K")):
-						#Boundary checking for right jump; if out of range, check left move.
-						if(j + 2 >= self.width):
-							if((self.board[i + 1][j - 1] == "  ")):
-								hval = i
-								wval = j
-								self.board[i + 1][j - 1] = self.board[hval][wval]
-								self.board[hval][wval] = "  "
-								self.printboard()
-								board.turn = "W"
-								return	
-							
-							#Else if space is taken by black piece, move to next piece for analysis.
-							elif(self.board[i + 1][j - 1].startswith("B")):
-								j += 1
-								continue
-							#Else if a jump is available to the left, check for valid move.
-							elif(self.board[i + 1][j - 1].startswith("W") or self.board[i + 1][j - 1].startswith("K")):
-								if((self.board[i + 2][j - 2] == "  ")):
-									hval = i
-									wval = j
-									self.board[i + 2][j - 2] = self.board[hval][wval]
-									self.board[hval][wval] = "  "
-									self.board[i + 1][j - 1] = "  "
-									board.whitePieces -= 1									
-									self.printboard()
-									board.turn = "W"
-									return
-						#Else if move is valid, make jump.						
-						elif((self.board[i + 2][j + 2] == "  ")):
-							hval = i
-							wval = j
-							self.board[i + 2][j + 2] = self.board[hval][wval]
-							self.board[hval][wval] = "  "
-							self.board[i + 1][j + 1] = "  "
-							board.whitePieces -= 1							
-							self.printboard()
-							board.turn = "W"
-							return	
-
-					#Else move left if a left move is available.
-					elif((self.board[i + 1][j - 1] == "  ")):
-						check = board.checkMove(i + 1, j - 1)
-						if(check == 1):						
-							hval = i
-							wval = j
-							self.board[i + 1][j - 1] = self.board[hval][wval]
-							self.board[hval][wval] = "  "
-							self.printboard()
-							board.turn = "W"
-							return
-						elif(check == 0):
-							pass
-								
-					#Else if move right if a right move is available.
-					elif((self.board[i + 1][j + 1] == "  ")):
-						check = board.checkMove(i + 1, j + 1)
-						if(check == 1):						
-							hval = i
-							wval = j
-							self.board[i + 1][j + 1] = self.board[hval][wval]
-							self.board[hval][wval] = "  "
-							self.printboard()
-							board.turn = "W"
-							return
-						elif(check == 0):
-							j += 1
-							continue
-									
-					#Movement abilities for Queens only 
-					if(self.board[i][j].startswith("Q")):
-						#If left space is occupied, and a jump is available, take the jump.				
-						if(self.board[i - 1][j - 1].startswith("W") or self.board[i - 1][j - 1].startswith("K")):						
-							#Boundary checking for left up jump; if out of range, check right move.
-							if(j - 2 < 0):
-								if((self.board[i - 1][j + 1] == "  ")):								
-									hval = i
-									wval = j
-									self.board[i - 1][j + 1] = self.board[hval][wval]
-									self.board[hval][wval] = "  "								
-									self.printboard()
-									board.turn = "W"
-									return	
-							
-								#Else if space is taken by black piece, move to next piece for analysis.
-								elif(self.board[i - 1][j + 1].startswith("B")):
-									j += 1
-									continue
-								#Else if a jump is available to the right, check for valid move.
-								elif(self.board[i - 1][j + 1].startswith("W") or self.board[i - 1][j + 1].startswith("K")):
-									if((self.board[i - 2][j + 2] == "  ")):
-										hval = i
-										wval = j
-										self.board[i - 2][j + 2] = self.board[hval][wval]
-										self.board[hval][wval] = "  "
-										self.board[i - 1][j + 1] = "  "
-										board.whitePieces -= 1									
-										self.printboard()
-										board.turn = "W"
-										return
-							#Else if move is valid, make jump.						
-							elif((self.board[i - 2][j - 2] == "  ")):
-								hval = i
-								wval = j
-								self.board[i - 2][j - 2] = self.board[hval][wval]
-								self.board[hval][wval] = "  "
-								self.board[i - 1][j - 1] = "  "
-								board.whitePieces -= 1							
-								self.printboard()
-								board.turn = "W"
-								return	
-						
-						#If right up space is occupied, and a jump is available, take the jump.				
-						elif(self.board[i - 1][j + 1].startswith("W") or self.board[i - 1][j + 1].startswith("K")):
-							#Boundary checking for right up jump; if out of range, check left move.
-							if(j + 2 >= self.width):
-								if((self.board[i - 1][j - 1] == "  ")):
-									hval = i
-									wval = j
-									self.board[i - 1][j - 1] = self.board[hval][wval]
-									self.board[hval][wval] = "  "
-									self.printboard()
-									board.turn = "W"
-									return	
-							
-								#Else if space is taken by black piece, move to next piece for analysis.
-								elif(self.board[i - 1][j - 1].startswith("B")):
-									j += 1
-									continue
-								#Else if a jump is available to the left, check for valid move.
-								elif(self.board[i - 1][j - 1].startswith("W") or self.board[i - 1][j - 1].startswith("K")):
-									if((self.board[i - 2][j - 2] == "  ")):
-										hval = i
-										wval = j
-										self.board[i - 2][j - 2] = self.board[hval][wval]
-										self.board[hval][wval] = "  "
-										self.board[i - 1][j - 1] = "  "
-										board.whitePieces -= 1									
-										self.printboard()
-										board.turn = "W"
-										return
-							#Else if move is valid, make jump.						
-							elif((self.board[i - 2][j + 2] == "  ")):
-								hval = i
-								wval = j
-								self.board[i - 2][j + 2] = self.board[hval][wval]
-								self.board[hval][wval] = "  "
-								self.board[i - 1][j + 1] = "  "
-								board.whitePieces -= 1							
-								self.printboard()
-								board.turn = "W"
-								return	
-
-						#Else move up left if a left move is available.
-						elif((self.board[i - 1][j - 1] == "  ")):
-							check = board.checkMove(i - 1, j - 1)
-							if(check == 1):						
-								hval = i
-								wval = j
-								self.board[i - 1][j - 1] = self.board[hval][wval]
-								self.board[hval][wval] = "  "
-								self.printboard()
-								board.turn = "W"
-								return
-							elif(check == 0):
-								pass
-								
-						#Else if move up right if a right move is available.
-						elif((self.board[i - 1][j + 1] == "  ")):
-							check = board.checkMove(i - 1, j + 1)
-							if(check == 1):						
-								hval = i
-								wval = j
-								self.board[i - 1][j + 1] = self.board[hval][wval]
-								self.board[hval][wval] = "  "
-								self.printboard()
-								board.turn = "W"
-								return
-							elif(check == 0):
-								j += 1
-								continue	
-					
-					#Create queen piece for black.				
-					if hval == 7:
-						self.board[hval][wval] = self.kingme(str)
-						self.printboard()
-															
-					
-				j += 1
-			i -= 1
+			i -= 1		
+		board.mediumMode()
 		
 		
 	
